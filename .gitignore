@@ -3,3 +3,5 @@ env.R
 .RData
 
 .Rhistory
+
+.RDataTmp

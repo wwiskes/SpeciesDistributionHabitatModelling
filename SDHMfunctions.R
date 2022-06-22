@@ -126,7 +126,7 @@ cutFunction <- function(data, cut, preserve, remove) {
     BadCol <- c()
     for (x in colnames(df4)) {
       var <- df4 %>%
-        select(x) %>%
+        dplyr::select(x) %>%
         filter(get(x) != FALSE)
       if (row.names(var) != colnames(var)) {
         #print(row.names(var)[2:length(row.names(var))])

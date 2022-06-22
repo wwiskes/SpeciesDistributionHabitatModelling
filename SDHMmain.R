@@ -1,15 +1,8 @@
 # ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .R
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.13.7
-#   kernelspec:
-#     display_name: R
-#     language: R
-#     name: ir
+# This script requires a functions script titled "SDHMfunctions"
+# This script is designed to create ensemble species distribution models from presence point data and predictor layers
+# Written by William Wiskes
+# Last update 6/22/2021
 # ---
 
 # +

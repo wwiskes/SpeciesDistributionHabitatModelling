@@ -29,8 +29,6 @@ utext <- extent(c(-1610897,-1059966,1591940,2274654))
 temp <- crop(temp, utext)
 
 # -
-##the 'queryPostgres' code will not run without a env script.
-#pointData <- queryPostgres("ybcu") 
 
 #1000 random points within the state of utah have been provided as a placeholder
 pointData <- read.csv("randompoints.csv")
@@ -39,6 +37,10 @@ pointData <- read.csv("randompoints.csv")
 #The first column is not used in these functions. But could be a 'keep' column to filter off of
 #The second column must be X (longitude)
 #The third column must be Y (latitude)
+
+#it is also an option to pull data from a postgres database
+#the queryPostgres code will not run without a env script.
+#pointData <- queryPostgres("ybcu") 
 
 head(pointData) 
 

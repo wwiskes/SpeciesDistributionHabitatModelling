@@ -27,7 +27,7 @@ st_crs(blob) <- proj
 #Set Extent
 utext <- extent(c(-1610897,-1059966,1591940,2274654))
 temp <- crop(temp, utext)
-# -
+
 
 #the 'queryPostgres' code will not run without a env script.
 #pointData <- queryPostgres("ybcu") 

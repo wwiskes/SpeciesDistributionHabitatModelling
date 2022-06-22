@@ -160,6 +160,7 @@ cutFunction <- function(data, cut, preserve, remove) {
     data <- data[, (colnames(data) %in% c('sppres','x','y',colnames(names)))]
         }
     #data = na.omit(data)
+    data = data[ , colSums(is.na(data)) == 0]
     output <- list(data,df1)
     } 
 

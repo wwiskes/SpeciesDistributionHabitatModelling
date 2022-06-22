@@ -157,6 +157,7 @@ cutFunction <- function(data, cut, preserve, remove) {
         }else{
     data <- data[, (colnames(data) %in% c('sppres','x','y',colnames(names)))]
         }
+    data = na.omit(data)
     output <- list(data,df1)
     } 
 

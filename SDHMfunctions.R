@@ -243,11 +243,6 @@ maxFunction <- function(data, cut) {
     fold <- kfold(xy, k = 5)
     pres.tst <- xy[fold == 1, ]
     pres.tr <- xy[fold!= 1, ]
-
-#     newList <- gsub("gs://", "/vsicurl/https://storage.googleapis.com/",rasterList)
-#     newr <- stack(newList)
-#     names(newr) <- column_names
-#     cut <- subset(newr, colnames(data[,4:ncol(data)]))
     
     mod1.MAX <- maxent(cut, pres.tr)
     mod2.MAX <- mod1.MAX

@@ -129,12 +129,13 @@ cutFunction <- function(data, cut, preserve, remove) {
         select(x) %>%
         filter(get(x) != FALSE)
       if (row.names(var) != colnames(var)) {
-        BadCol <- append(BadCol,row.names(var))
+        #print(row.names(var)[2:length(row.names(var))])
+        BadCol <- append(BadCol,row.names(var)[2:length(row.names(var))])
       }
       
       #print(get(paste0('df4$', x)))
     }
-    print(BadCol)  
+    #print(BadCol)  
     bad <- names(data) %in% c(BadCol, remove)
     names <- data[!bad]
     

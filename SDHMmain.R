@@ -34,13 +34,13 @@ temp <- crop(temp, utext)
 pointData <- read.csv("randompoints.csv")
 #They are in the projection 5070, and so must be anything you replace them with.
 #The dataset must have 3 columns. 
-#The first column is not used in these functions. But could be a 'keep' column to filter off of
+#The first column is reuqired but not used in these functions. But could be a 'keep' column to filter off of
 #The second column must be X (longitude)
 #The third column must be Y (latitude)
 
 #it is also an option to pull data from a postgres database
-#the queryPostgres code will not run without a env script.
 #pointData <- queryPostgres("ybcu") 
+# queryPostgres code will not run without a env script.
 
 head(pointData) 
 

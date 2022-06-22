@@ -73,6 +73,8 @@ cut <- 0.8
 # declare list of columns to preserve or remove regardless of spearmans. To leave blank use: <- c("")
 preserve <- c("gm_tr")
 remove <- c("gm_hli")
+#remove warnings
+options (warn = - 1)
 #remove columns without statistical correlation, with exception to preserve/remove
 cutF <- cutFunction(data, cut, preserve, remove)
 #for checking the output of the spearmans the table is provided here, this is not used in subsequent steps

@@ -121,6 +121,7 @@ cutFunction <- function(data, cut, preserve, remove) {
     #remove na columns
     all_na <- function(x) any(!is.na(x))
     df3 <- df2 %>% select_if(all_na)
+    noNA <- colnames(df3)
     #return a dataframe which all that have a correlation above the abs of cut as TRUE
     df4 <-as.data.frame(subset(df3 > cut | df3 < -cut))
     BadCol <- c()
@@ -139,8 +140,9 @@ cutFunction <- function(data, cut, preserve, remove) {
     }
     #print(BadCol)  
     bad <- names(data) %in% c(BadCol, remove)
-    names <- data[!bad]
-    
+    good <- data[!bad]
+    removeNA <- names(good) %in% noNA
+    names <- good[removeNA]
     names <- names[,9:ncol(names)]
 
     # #count the TRUE
@@ -157,7 +159,7 @@ cutFunction <- function(data, cut, preserve, remove) {
         }else{
     data <- data[, (colnames(data) %in% c('sppres','x','y',colnames(names)))]
         }
-    data = na.omit(data)
+    #data = na.omit(data)
     output <- list(data,df1)
     } 
 

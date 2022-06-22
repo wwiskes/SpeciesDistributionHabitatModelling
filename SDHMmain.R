@@ -28,8 +28,8 @@ st_crs(blob) <- proj
 utext <- extent(c(-1610897,-1059966,1591940,2274654))
 temp <- crop(temp, utext)
 
-
-#the 'queryPostgres' code will not run without a env script.
+# -
+##the 'queryPostgres' code will not run without a env script.
 #pointData <- queryPostgres("ybcu") 
 
 #1000 random points within the state of utah have been provided as a placeholder

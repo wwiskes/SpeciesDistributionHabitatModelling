@@ -37,7 +37,9 @@ pointData <- read.csv("randompoints.csv")
 # pointData <- queryPostgres("ybcu") 
 # queryPostgres code will not run without a env script.
 
+#for testing, only use a small subset of data
 pointData <- head(pointData) 
+pointData
 
 # +
 #Set Extent

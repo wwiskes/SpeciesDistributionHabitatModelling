@@ -36,7 +36,7 @@ d
 #To generate pseudo absences from the extent of the study area
 library(sfheaders)
 pseudoFunction <- function(pointSF, blob, temp) {
-    #intersect points with state, this is redundant with this data set, but may be important for other workflows
+    #intersect points with study area, this is redundant with state data, but may be important for other workflows
     SF <- pointSF %>% st_intersection(blob)
     #make a dataframe
     aea <- sf_to_df(SF)
@@ -125,6 +125,8 @@ cutFunction <- function(data, cut, preserve, remove) {
     #return a dataframe which all that have a correlation above the abs of cut as TRUE
     df4 <-as.data.frame(subset(df3 > cut | df3 < -cut))
     BadCol <- c()
+    #append column names over cut threshold to a list except the first variable correlated to them.
+    #only check subsiquent columns if not already in list.
     for (x in colnames(df4)) {
       var <- df4 %>%
         dplyr::select(x) %>%
@@ -139,8 +141,10 @@ cutFunction <- function(data, cut, preserve, remove) {
       #print(get(paste0('df4$', x)))
     }
     #print(BadCol)  
+    #remove predictors over cut threshold 
     bad <- names(data) %in% c(BadCol, remove)
     good <- data[!bad]
+    #remove predictors with NA
     removeNA <- names(good) %in% noNA
     names <- good[removeNA]
     names <- names[,9:ncol(names)]
@@ -160,6 +164,7 @@ cutFunction <- function(data, cut, preserve, remove) {
     data <- data[, (colnames(data) %in% c('sppres','x','y',colnames(names)))]
         }
     #data = na.omit(data)
+    #again check for and remove NAs
     data = data[ , colSums(is.na(data)) == 0]
     output <- list(data,df1)
     } 

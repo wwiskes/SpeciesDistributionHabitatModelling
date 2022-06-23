@@ -5,7 +5,6 @@
 # Last update 6/22/2021
 # ---
 
-# +
 #at 32gb ram & 16cpu this takes around 1hr to run
 library(tidyverse)
 library(raster)
@@ -20,15 +19,11 @@ proj <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +e
 temp <- raster("/vsicurl/https://storage.googleapis.com/predictors_public/bounds/1km_template.tif")
 #Load in Utah Fnet
 fnetSF <-st_read("/vsicurl/https://storage.googleapis.com/predictors_public/bounds/km1_fnet.geojson", crs = proj)
+
 #Load in Utah extent simple feature
+#Replace this with your own study area if needed. MUST BE IN EPSG 5070
 blob <- st_read("https://storage.googleapis.com/predictors_public/bounds/huc_aea.geojson") 
 st_crs(blob) <- proj 
-
-#Set Extent
-utext <- extent(c(-1610897,-1059966,1591940,2274654))
-temp <- crop(temp, utext)
-
-# -
 
 #1000 random points within the state of utah have been provided as a placeholder
 pointData <- read.csv("randompoints.csv")
@@ -42,7 +37,20 @@ pointData <- read.csv("randompoints.csv")
 # pointData <- queryPostgres("ybcu") 
 # queryPostgres code will not run without a env script.
 
-head(pointData) 
+pointData <- head(pointData) 
+
+# +
+#Set Extent
+#for utah: (also can be custom set here)
+#ext <- extent(c(-1610897,-1059966,1591940,2274654))
+#for to points extent:
+ext <- extent(pointData)
+#from study area:
+#ext <- extent(blob)
+
+#crop modelling extent template
+temp <- crop(temp, ext)
+# -
 
 #They are in the projection 5070, please set x&y coords accordingly
 coords <- colnames(head(pointData)[,2:3])
@@ -80,9 +88,12 @@ cutF <- cutFunction(data, cut, preserve, remove)
 #for checking the output of the spearmans the table is provided here, this is not used in subsequent steps
 spearmans <- cutF[[2]]
 cutData <- cutF[[1]]
+head(cutData)
 
 #this function not only makes the raster stack, but renames each layer to the correct corresponding column
 rasters <- rasterStack(cutData, rasterList, column_names)
+#optional, crop rasters to the modelling extent.
+rasters <- crop(rasters, ext)
 
 #Generalized linear model
 glm <- glmFunction(cutData, rasters)

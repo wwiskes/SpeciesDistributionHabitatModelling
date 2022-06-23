@@ -12,6 +12,6 @@ Once the notebook is running click "Git Clone" in the control bar and enter:
 
 https://github.com/wwiskes/SpeciesDistributionHabitatModelling.git
 
-This will clone this repository into your virtual machine, anytime you want to sync to check for new code revisions simply open the "Git" tab and select "Pull from Remote". This will ensure you have the most recent version of this script.
+This will clone this repository into your virtual machine, anytime you want to sync to check for new code revisions simply open the "Git" tab and select "Pull from Remote (force)". This will ensure you have the most recent version of this script.
 
 Thanks and happy modelling. 

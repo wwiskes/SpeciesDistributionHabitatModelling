@@ -41,23 +41,23 @@ pointData <- read.csv("randompoints.csv")
 pointData <- head(pointData) 
 pointData
 
-# +
-#Set Extent
-#for utah: (also can be custom set here)
-#ext <- extent(c(-1610897,-1059966,1591940,2274654))
-#for to points extent:
-ext <- extent(pointData)
-#from study area:
-#ext <- extent(blob)
-
-#crop modelling extent template
-temp <- crop(temp, ext)
-# -
-
 #They are in the projection 5070, please set x&y coords accordingly
 coords <- colnames(head(pointData)[,2:3])
 pointSF <- st_as_sf(pointData, coords = coords, crs = proj)
 head(pointSF)
+
+# +
+#Set Extent
+#The extent is set from the study area named "Blob", if you do not have a study area you 
+#can generate one from your point data below
+ext <- extent(pointSF)
+blob <- st_as_sf(as(ext, "SpatialPolygons"))
+st_crs(blob) <- proj 
+#from study area:
+ext <- extent(blob)
+#crop modelling extent template
+temp <- crop(temp, ext)
+# -
 
 #Generate pseudo absences from the extent of the study area
 #Needs the points simple feature, the blob geojson, and the template raster

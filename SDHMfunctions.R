@@ -167,7 +167,16 @@ cutFunction <- function(data, cut, preserve, remove) {
     #again check for and remove NAs
     data = data[ , colSums(is.na(data)) == 0]
     output <- list(data,df1)
-    } 
+} 
+
+boxFunction <- function(cutData){
+  name <- names(cutData[,4:ncol(cutData)])
+  for(n in name) {
+    x1 <- unlist(cutData[n])
+    x2 <- unlist(cutData['sppres'])
+    boxplot(x1~x2,main = n, xlab = "Absence/Presence", ylab = n)
+  }
+}
 
 #This function is designed to make the raster stack and subset by the selected columns
 rasterStack <- function(data, rasterList, column_names) {   

@@ -91,6 +91,9 @@ cutF <- cutFunction(data, cut, preserve, remove)
 spearmans <- cutF[[2]]
 cutData <- cutF[[1]]
 head(cutData)
+boxFunction(cutData)
+
+
 
 #this function not only makes the raster stack, but renames each layer to the correct corresponding column
 rasters <- rasterStack(cutData, rasterList, column_names)

@@ -194,24 +194,25 @@ formatColumns <- function(dat) {
     pred <- colnames(dat[c(4:ncol(dat))]) # assign preds column names
     mod.formula <- as.formula(paste(as.factor(resp), "~", paste(pred, collapse = "+"))) # formula
 }
-glmFunction <- function(data, cut) {
-    mod1.LR <- glm(formatColumns(data), family = binomial, data = data)
-    mod2.LR <-step(mod1.LR, trace = F)
-    mod2.pred <- predict(mod2.LR, type = "response")
-    mod1 <- "mod2.LR"
-    dat2 <-cbind(mod1, data[1], mod2.pred)
-    mod.cut.GLM <- optimal.thresholds(dat2, opt.methods = c("Default"))
-    
-    # newList <- gsub("gs://", "/vsicurl/https://storage.googleapis.com/",rasterList)
-    # # newKeep <- gsub("gs://", "/vsicurl/https://storage.googleapis.com/",rasterKeep)
-    # # appended <- append(newList, newKeep)
-    # newr <- stack(newList)
-    # names(newr) <- column_names
-    # cut <- subset(newr, colnames(data[,4:ncol(data)]))
-
-    modFprob.LR <- predict(cut, mod2.LR, type = "response", fun = predict, index = 2)
-    modFclas.LR <- reclassify(modFprob.LR, (c(0, mod.cut.GLM$mod2.pred, 0, mod.cut.GLM$mod2.pred, 1, 1)))
-    modFclas.LR
+glmFunction <- function(cutData, rasters) {
+  mod1.LR <- glm(formatColumns(cutData), family = binomial, data = cutData)
+  mod2.LR <-step(mod1.LR, trace = F)
+  mod2.pred <- predict(mod2.LR, type = "response")
+  mod1 <- "mod2.LR"
+  dat2 <-cbind(mod1, cutData[1], mod2.pred)
+  mod.cut.GLM <- optimal.thresholds(dat2, opt.methods = c("Default"))
+  
+  #start accuracy assessment
+  library(DAAG)
+  jack <- nrow(cutData)
+  mod2.jack <- CVbinary(mod2.LR, nfolds = jack, rand = c(1:jack), print.details = F)
+  mod2.jack <- mod2.jack$cvhat
+  dat2 <- cbind(dat2, mod2.jack)
+  auc.roc.plot(dat2, color = T)
+  #end acc assess
+  modFprob.LR <- predict(rasters, mod2.LR, type = "response", fun = predict, index = 2)
+  modFclas.LR <- reclassify(modFprob.LR, (c(0, mod.cut.GLM$mod2.pred, 0, mod.cut.GLM$mod2.pred, 1, 1)))
+  modFclas.LR
 }
 
 #Generalized additive model

@@ -258,50 +258,52 @@ gamFunction <- function(data, cut) {
 #MaxEnt model
 library(dismo)
 library(rJava)
-
-maxFunction <- function(data, cut) {   
-    xy <- data[,2:3]
-    fold <- kfold(xy, k = 5)
-    pres.tst <- xy[fold == 1, ]
-    pres.tr <- xy[fold!= 1, ]
-    
-    mod1.MAX <- maxent(cut, pres.tr)
-    mod2.MAX <- mod1.MAX
-    mod2.bak <- randomPoints(cut, 1000)
-
-    mod2.val <- evaluate(mod2.MAX, p = pres.tst, a = mod2.bak, x = cut)
-    pts.tst <- data.frame(extract(cut, pres.tst))
-    pts.bak <- data.frame(extract(cut, mod2.bak))
-    mod2.val <- evaluate(mod2.MAX, p = pts.tst, a = pts.bak)
-
-    bak.xy <- data.frame(randomPoints(cut, dim(xy)[1]*4))
-    bak.pts <- data.frame(extract(cut, bak.xy))
-    bak.pred <- predict(mod1.MAX, bak.pts)
-    bak.xy$sppres <- as.integer(0)
-
-    pres.pts <- data.frame(extract(cut, xy))
-    pres.pred <- predict(mod1.MAX, pres.pts)
-    mod1.val <- evaluate(mod1.MAX, p = pres.tst, a = bak.xy[,-3], x = cut)
-    ybcu.tr.p <- data %>% filter(sppres == 1)
-
-    modl <- "mod1.MAX"
-    mod1.pred <- pres.pred
-    tmp.p <- cbind(modl, ybcu.tr.p[1], mod1.pred)
-    mod1.pred <- bak.pred
-    tmp.b <- cbind(modl, bak.xy[3], mod1.pred)
-    dat2 <- data.frame(rbind(tmp.p, tmp.b))
-    mod.cut.MAXENT <- threshold(mod1.val)
-    optimal.thresholds(dat2, opt.methods = 1:6)
-    mod.cut.MAXENT[c(1:2)]
-    optimal.thresholds(dat2, opt.method = c(4,3))
-    mod1.cfmat <- table(dat2[[2]], factor(as.numeric(dat2$mod1.pred >= mod.cut.MAXENT$spec_sens)))
-    mod1.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.MAXENT$spec_sens, st.dev = F)
-    tss <- mod1.acc$sensitivity + mod1.acc$specificity - 1
-    mod1.acc <- cbind(mod1.acc[1:7], tss)
-
-    mod1.MAXprob = predict(mod1.MAX, cut)
-    mod1.MAXclas = reclassify(mod1.MAXprob, c(0,mod.cut.MAXENT[[2]],0,mod.cut.MAXENT[[2]],1,1))
-    mod1.MAXclas 
+library(data.table)#as.data.table(
+maxFunction <- function(cutData, rasters) {   
+  xy <- cutData[,2:3]
+  fold <- kfold(xy, k = 5)
+  pres.tst <- xy[fold == 1, ]
+  pres.tr <- xy[fold!= 1, ]
+  
+  mod1.MAX <- maxent(rasters, pres.tr)
+  mod2.MAX <- mod1.MAX
+  mod2.bak <- randomPoints(rasters, 1000)
+  
+  mod2.val <- evaluate(mod2.MAX, p = pres.tst, a = mod2.bak, x = rasters)
+  pts.tst <- data.frame(extract(rasters, pres.tst))
+  pts.bak <- data.frame(extract(rasters, mod2.bak))
+  mod2.val <- evaluate(mod2.MAX, p = pts.tst, a = pts.bak)
+  
+  bak.xy <- data.frame(randomPoints(rasters, dim(xy)[1]*4))
+  bak.pts <- data.frame(extract(rasters, bak.xy))
+  bak.pred <- predict(mod1.MAX, bak.pts)
+  bak.xy$sppres <- as.integer(0)
+  
+  pres.pts <- data.frame(extract(rasters, xy))
+  pres.pred <- predict(mod1.MAX, pres.pts)
+  mod1.val <- evaluate(mod1.MAX, p = pres.tst, a = bak.xy[,-3], x = rasters)
+  ybcu.tr.p <- cutData %>% filter(sppres == 1)
+  
+  modl <- "mod1.MAX"
+  mod1.pred <- pres.pred
+  
+  tmp.p <- cbind(as.data.table(modl), as.data.table(ybcu.tr.p[1]), as.data.table(mod1.pred))###############################################################<-
+  mod1.pred <- bak.pred
+  tmp.b <- cbind(modl, bak.xy[3], mod1.pred)
+  dat2 <- data.frame(rbind(tmp.p, tmp.b))
+  mod.cut.MAXENT <- threshold(mod1.val)
+  optimal.thresholds(dat2, opt.methods = 1:6)
+  mod.cut.MAXENT[c(1:2)]
+  optimal.thresholds(dat2, opt.method = c(4,3))
+  mod1.cfmat <- table(dat2[[2]], factor(as.numeric(dat2$mod1.pred >= mod.cut.MAXENT$spec_sens)))
+  mod1.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.MAXENT$spec_sens, st.dev = F)
+  tss <- mod1.acc$sensitivity + mod1.acc$specificity - 1
+  mod1.acc <- cbind(mod1.acc[1:7], tss)
+  
+  mod1.MAXprob = predict(mod1.MAX, rasters)
+  mod1.MAXclas = reclassify(mod1.MAXprob, c(0,mod.cut.MAXENT[[2]],0,mod.cut.MAXENT[[2]],1,1))
+  mod1.MAXclas 
+  
 } 
 
 # -

@@ -38,8 +38,8 @@ pointData <- read.csv("randompoints.csv")
 # queryPostgres code will not run without a env script.
 
 #for testing, only use a small subset of data
-pointData <- head(pointData) 
-pointData
+# pointData <- head(pointData) 
+# pointData
 
 #They are in the projection 5070, please set x&y coords accordingly
 coords <- colnames(head(pointData)[,2:3])
@@ -115,7 +115,9 @@ max <- maxFunction(cutData, rasters)
 
 plot(max)
 plot(blob$geometry, add =T)
+##########################################START TESTING
 
+############################################END TESTING
 #Random Forest model
 raf <- rafFunction(cutData, rasters)
 

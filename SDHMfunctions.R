@@ -231,28 +231,28 @@ formatScope <- function(dat) {
     pred <- colnames(dat[c(4:ncol(dat))]) # assign preds column names
     mod.form2 <- as.list(paste("~1 +",pred,"+ lo(",pred,", 3) + lo(",pred,",5)")) #
 }
-gamFunction <- function(data, cut) {
-    mod1.LR <- gam(formatGam(data), family = binomial, data = data)
-    out<- formatScope(data) #new
-    out<- lapply(out,as.formula) ##
-    names(out) <- colnames(data[c(4:ncol(data))]) # new
-    mod2.LR <-step.Gam(mod1.LR, scope=out) #new
-    #mod2.LR <-step.Gam(mod1.LR, scope=list(formatScope(data))) # old
-    mod2.pred <- predict(mod2.LR, type = "response")
-    mod1 <- "mod2.LR"
-    dat2 <-cbind(mod1, data[1], mod2.pred)
-    mod.cut.GLM <- optimal.thresholds(dat2, opt.methods = c("Default"))
-    
-    # newList <- gsub("gs://", "/vsicurl/https://storage.googleapis.com/",rasterList)
-    # # newKeep <- gsub("gs://", "/vsicurl/https://storage.googleapis.com/",rasterKeep)
-    # # appended <- append(newList, newKeep)
-    # newr <- stack(newList)
-    # names(newr) <- column_names
-    # cut <- subset(newr, colnames(data[,4:ncol(data)]))
-
-    modFprob.LR <- predict(cut, mod2.LR, type = "response", fun = predict, index = 2)
-    modFclas.GAM <- reclassify(modFprob.LR, (c(0, mod.cut.GLM$mod2.pred, 0, mod.cut.GLM$mod2.pred, 1, 1)))
-    modFclas.GAM 
+gamFunction <- function(catData, rasters) {
+  
+  mod1.LR <- gam(formatGam(cutData), family = binomial, data = cutData)
+  out<- formatScope(cutData) #new
+  out<- lapply(out,as.formula) ##
+  names(out) <- colnames(cutData[c(4:ncol(cutData))]) # new
+  mod2.LR <-step.Gam(mod1.LR, scope=out) #new
+  
+  mod2.pred <- predict(mod2.LR, type = "response")
+  mod1 <- "mod2.LR"
+  dat2 <-cbind(mod1, cutData[1], mod2.pred)
+  mod.cut.GLM <- optimal.thresholds(dat2, opt.methods = c("Default"))
+  #
+  jack <- nrow(cutData)
+  mod3.jack5 <- CVbinary(mod2.LR, nfolds = 3, print.details = F)
+  mod3.jack5 <- mod3.jack5$cvhat
+  dat3 <- cbind(dat2, mod3.jack5)
+  auc.roc.plot(dat3, color = T)
+  #
+  modFprob.LR <- predict(rasters, mod2.LR, type = "response", fun = predict, index = 2)
+  modFclas.GAM <- reclassify(modFprob.LR, (c(0, mod.cut.GLM$mod2.pred, 0, mod.cut.GLM$mod2.pred, 1, 1)))
+  modFclas.GAM 
 }
 
 
@@ -269,7 +269,7 @@ maxFunction <- function(cutData, rasters) {
   mod1.MAX <- maxent(rasters, pres.tr)
   mod2.MAX <- mod1.MAX
   mod2.bak <- randomPoints(rasters, 1000)
-  
+  plot(mod1.MAX)
   mod2.val <- evaluate(mod2.MAX, p = pres.tst, a = mod2.bak, x = rasters)
   pts.tst <- data.frame(extract(rasters, pres.tst))
   pts.bak <- data.frame(extract(rasters, mod2.bak))
@@ -300,7 +300,7 @@ maxFunction <- function(cutData, rasters) {
   mod1.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.MAXENT$spec_sens, st.dev = F)
   tss <- mod1.acc$sensitivity + mod1.acc$specificity - 1
   mod1.acc <- cbind(mod1.acc[1:7], tss)
-  
+  auc.roc.plot(dat2, color = T)
   mod1.MAXprob = predict(mod1.MAX, rasters)
   mod1.MAXclas = reclassify(mod1.MAXprob, c(0,mod.cut.MAXENT[[2]],0,mod.cut.MAXENT[[2]],1,1))
   mod1.MAXclas 
@@ -321,7 +321,7 @@ rafFunction <- function(data, cut) {
     mod1.pred <- predict(mod1.RF, type = "prob")[,2]
     modl <- "mod1.RF"
     dat2 <- cbind(modl, data[1], mod1.pred)
-    
+    auc.roc.plot(dat2, color = T)
     # newList <- gsub("gs://", "/vsicurl/https://storage.googleapis.com/",rasterList)
     # newr <- stack(newList)
     # names(newr) <- column_names
@@ -365,5 +365,7 @@ brtFunction <- function(data, cut) {
     mod1.acc.brt <- cbind(mod1.acc[1:7], tss)
     mod1.BRTprob = predict(cut, mod1.BRT, n.trees = mod1.BRT$gbm.call$best.trees, type = "response")
     mod1.BRTclas <- reclassify(mod1.BRTprob, c(0,mod.cut.BRT[[2]],0,mod.cut.BRT[[2]],1,1))
+    
+    auc.roc.plot(dat2, color = T)
     mod1.BRTclas
 }

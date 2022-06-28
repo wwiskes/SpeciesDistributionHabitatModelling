@@ -189,6 +189,9 @@ rasterStack <- function(data, rasterList, column_names) {
 
 #Generalized linear model
 library(PresenceAbsence)
+library(DAAG)
+library(grid)
+library(gridExtra)
 formatColumns <- function(dat) {
     resp <- colnames(dat[1]) # assign resp column name
     pred <- colnames(dat[c(4:ncol(dat))]) # assign preds column names
@@ -201,14 +204,24 @@ glmFunction <- function(cutData, rasters) {
   mod1 <- "mod2.LR"
   dat2 <-cbind(mod1, cutData[1], mod2.pred)
   mod.cut.GLM <- optimal.thresholds(dat2, opt.methods = c("Default"))
-  
+  #table
+  plot.new()
+  table <- summary(mod2.LR)
+  grid.draw(tableGrob(table$coefficients))
   #start accuracy assessment
-  library(DAAG)
+
   jack <- nrow(cutData)
   mod2.jack <- CVbinary(mod2.LR, nfolds = jack, rand = c(1:jack), print.details = F)
   mod2.jack <- mod2.jack$cvhat
   dat2 <- cbind(dat2, mod2.jack)
   auc.roc.plot(dat2, color = T)
+  
+  mod2.accB <- presence.absence.accuracy(dat2, threshold = mod.cut.GLM$mod2.pred, st.dev = F)
+  tss <- mod2.accB$sensitivity+mod2.accB$specificity-1
+  
+  mod2.accB <- cbind(mod2.accB[1:7], tss)
+  plot.new()
+  grid.draw(tableGrob(mod2.accB))
   #end acc assess
   modFprob.LR <- predict(rasters, mod2.LR, type = "response", fun = predict, index = 2)
   modFclas.LR <- reclassify(modFprob.LR, (c(0, mod.cut.GLM$mod2.pred, 0, mod.cut.GLM$mod2.pred, 1, 1)))

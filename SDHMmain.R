@@ -37,9 +37,11 @@ pointData <- read.csv("randompoints.csv")
 # pointData <- queryPostgres("ybcu") 
 # queryPostgres code will not run without a env script.
 
-#for testing, only use a small subset of data
+# +
+# for testing, only use a small subset of data
 # pointData <- head(pointData) 
 # pointData
+# -
 
 #They are in the projection 5070, please set x&y coords accordingly
 coords <- colnames(head(pointData)[,2:3])

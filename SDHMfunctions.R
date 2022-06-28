@@ -105,7 +105,7 @@ pseudoFunction <- function(pointSF, blob, temp) {
     PPSA
 }
 
-#This function removes columns from the data without statistical relevance according to spearmans 
+#This function removes columns from the data coorelated to eachother according to spearmans 
 #additional remove or preserve columns are added/removed based on lists within their respective variable names
 cutFunction <- function(data, cut, preserve, remove) {
     #remove non-data columns

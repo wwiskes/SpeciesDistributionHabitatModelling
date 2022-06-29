@@ -278,7 +278,7 @@ gamFunction <- function(catData, rasters) {
 }
 
 
-#MaxEnt model
+#MaxEnt
 library(dismo)
 library(rJava)
 library(data.table)#as.data.table(
@@ -319,9 +319,13 @@ maxFunction <- function(cutData, rasters) {
   mod.cut.MAXENT[c(1:2)]
   optimal.thresholds(dat2, opt.method = c(4,3))
   mod1.cfmat <- table(dat2[[2]], factor(as.numeric(dat2$mod1.pred >= mod.cut.MAXENT$spec_sens)))
+  #acc ass
   mod1.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.MAXENT$spec_sens, st.dev = F)
   tss <- mod1.acc$sensitivity + mod1.acc$specificity - 1
   mod1.acc <- cbind(mod1.acc[1:7], tss)
+  plot.new()
+  grid.draw(tableGrob(mod1.acc))
+  #
   auc.roc.plot(dat2, color = T)
   mod1.MAXprob = predict(mod1.MAX, rasters)
   mod1.MAXclas = reclassify(mod1.MAXprob, c(0,mod.cut.MAXENT[[2]],0,mod.cut.MAXENT[[2]],1,1))

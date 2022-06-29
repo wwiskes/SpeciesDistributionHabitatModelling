@@ -251,13 +251,20 @@ gamFunction <- function(catData, rasters) {
   #table
   plot.new()
   table <- summary(mod2.LR)
-  t <- as.data.frame(table$coefficients) %>% mutate_if(is.numeric, ~round(., 5))
+  t <- as.data.frame(table$anova) %>% mutate_if(is.numeric, ~round(., 5))
   grid.draw(tableGrob(t))
   #
   mod2.pred <- predict(mod2.LR, type = "response")
   mod1 <- "mod2.LR"
   dat2 <-cbind(mod1, cutData[1], mod2.pred)
   mod.cut.GLM <- optimal.thresholds(dat2, opt.methods = c("Default"))
+  #start acc ass
+  mod0.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.GLM$mod2.pred, st.dev = F)
+  tss <- mod0.acc$sensitivity+mod0.acc$specificity -1
+  mod0.acc <- cbind(mod0.acc[1:7], tss)
+  plot.new()
+  grid.draw(tableGrob(mod0.acc))
+
   #
   jack <- nrow(cutData)
   mod3.jack5 <- CVbinary(mod2.LR, nfolds = 3, print.details = F)

@@ -106,7 +106,9 @@ glm <- glmFunction(cutData, rasters)
 
 plot(glm)
 plot(blob$geometry, add =T)
-
+##########################################START TESTING
+source("SDHMfunctions.R")
+############################################END TESTING
 #Generalized additive model
 gam <- gamFunction(cutData, rasters)
 
@@ -118,9 +120,7 @@ max <- maxFunction(cutData, rasters)
 
 plot(max)
 plot(blob$geometry, add =T)
-##########################################START TESTING
 
-############################################END TESTING
 #Random Forest model
 raf <- rafFunction(cutData, rasters)
 

@@ -344,19 +344,19 @@ formatRaf <- function(dat) {
 }
 rafFunction <- function(data, cut) {   
     mod1.RF <- randomForest(formatRaf(data), importance = T, keep.forest = T, data = data)
+    varImpPlot(mod1.RF, main = "Variable Importance Plots")
     mod1.pred <- predict(mod1.RF, type = "prob")[,2]
     modl <- "mod1.RF"
     dat2 <- cbind(modl, data[1], mod1.pred)
     auc.roc.plot(dat2, color = T)
-    # newList <- gsub("gs://", "/vsicurl/https://storage.googleapis.com/",rasterList)
-    # newr <- stack(newList)
-    # names(newr) <- column_names
-    # cut <- subset(newr, colnames(data[,4:ncol(data)]))
-    
+    #ac as
     mod.cut.RF <- optimal.thresholds(dat2, opt.methods = c("ReqSens"), req.sens = 0.95)
     mod1.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.RF$mod1.pred, st.dev = F)
     tss <- mod1.acc$sensitivity + mod1.acc$specificity -1
     mod1.acc <- cbind(mod1.acc[1:7], tss)
+    plot.new()
+    grid.draw(tableGrob(mod1.acc))
+    #
     oob.acc <- presence.absence.accuracy(dat2, st.dev = F)
     tss <-oob.acc$sensitivity + oob.acc$specificity - 1
     oob.acc <- cbind(oob.acc[1:7], tss)
@@ -376,19 +376,23 @@ brtFunction <- function(data, cut) {
     pred <- 4:n.col
     resp <- paste("as.factor(", colnames(dat1[1]), ")", sep = "")
     mod1.BRT <- gbm.step(data = dat1, gbm.x = pred, gbm.y = 1, family = "bernoulli", tree.complexity = 3, learning.rate = 1e-04, bag.fraction = .75, n.folds = 10, n.trees = 50, plot.main = TRUE, keep.fold.fit = T)
-    mod2.BRT <-gbm.step(data = dat1, gbm.x = pred, gbm.y = 1, family = "bernoulli", tree.complexity = 3, learning.rate = .1, bag.fraction = .75, n.folds = 10, plot.main = TRUE, keep.fold.fit = TRUE)    
+    #mod2.BRT <-gbm.step(data = dat1, gbm.x = pred, gbm.y = 1, family = "bernoulli", tree.complexity = 3, learning.rate = .1, bag.fraction = .75, n.folds = 10, plot.main = TRUE, keep.fold.fit = TRUE)    
     modl <- "mod2.BRT"
     dat2 <- cbind(modl, dat1[1], mod1.BRT$fitted, mod1.BRT$fold.fit)
     names(dat2)[3:4] <-c("pred", "cvpred")
     dat2$cvpred <- exp(dat2$cvpred)/(1+ exp(dat2$cvpred))
     mod.cut.BRT <- optimal.thresholds(dat2, opt.methods = c("ObsPrev"))
     mod1.cfmatR <- table(dat2[[2]], factor(as.numeric(dat2$pred >= mod.cut.BRT$pred)))
+    gbm.plot(mod1.BRT)
 
     mod1.cfmatX <- table(dat2[[2]], factor(as.numeric(dat2$cvpred >= mod.cut.BRT$cvpred)))
+    #acc as
     mod1.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.BRT$pred, st.dev = F)
     tss <- mod1.acc$sensitivity + mod1.acc$specificity - 1
-
     mod1.acc.brt <- cbind(mod1.acc[1:7], tss)
+    plot.new()
+    grid.draw(tableGrob(mod1.acc.brt))
+    #
     mod1.BRTprob = predict(cut, mod1.BRT, n.trees = mod1.BRT$gbm.call$best.trees, type = "response")
     mod1.BRTclas <- reclassify(mod1.BRTprob, c(0,mod.cut.BRT[[2]],0,mod.cut.BRT[[2]],1,1))
     

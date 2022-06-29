@@ -113,9 +113,6 @@ gam <- gamFunction(cutData, rasters)
 plot(gam)
 plot(blob$geometry, add =T)
 
-##########################################START TESTING
-source("SDHMfunctions.R")
-############################################END TESTING
 #MaxEnt model
 max <- maxFunction(cutData, rasters)
 
@@ -128,6 +125,9 @@ raf <- rafFunction(cutData, rasters)
 plot(raf)
 plot(blob$geometry, add =T)
 
+##########################################START TESTING
+source("SDHMfunctions.R")
+############################################END TESTING
 #Boosted Regression Tree model
 brt <- brtFunction(cutData, rasters)
 

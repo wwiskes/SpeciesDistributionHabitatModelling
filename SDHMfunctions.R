@@ -207,7 +207,8 @@ glmFunction <- function(cutData, rasters) {
   #table
   plot.new()
   table <- summary(mod2.LR)
-  grid.draw(tableGrob(table$coefficients))
+  t <- table$coefficients %>% mutate_if(is.numeric, ~round(., 5))
+  grid.draw(tableGrob(t))
   #start accuracy assessment
 
   jack <- nrow(cutData)

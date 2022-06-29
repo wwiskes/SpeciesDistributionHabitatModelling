@@ -106,15 +106,16 @@ glm <- glmFunction(cutData, rasters)
 
 plot(glm)
 plot(blob$geometry, add =T)
-##########################################START TESTING
-source("SDHMfunctions.R")
-############################################END TESTING
+
 #Generalized additive model
 gam <- gamFunction(cutData, rasters)
 
 plot(gam)
 plot(blob$geometry, add =T)
 
+##########################################START TESTING
+source("SDHMfunctions.R")
+############################################END TESTING
 #MaxEnt model
 max <- maxFunction(cutData, rasters)
 

@@ -40,8 +40,8 @@ pointData <- read.csv("randompoints.csv")
 
 # +
 # for testing, only use a small subset of data
-# pointData <- head(pointData) 
-# pointData
+pointData <- head(pointData,100) 
+pointData
 # -
 
 #They are in the projection 5070, please set x&y coords accordingly

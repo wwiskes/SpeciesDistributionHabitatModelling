@@ -236,11 +236,7 @@ formatGam <- function(dat) {
     pred <- colnames(dat[c(4:ncol(dat))]) # assign preds column names
     mod.form <- as.formula(paste(as.factor(resp), "~", paste(paste("lo(",pred,",5)"), collapse = "+"))) # formula
 }
-# formatScope <- function(dat) {
-#     resp <- colnames(dat[1]) # assign resp column name
-#     pred <- colnames(dat[c(4:ncol(dat))]) # assign preds column names
-#     mod.form2 <- as.formula(paste(pred,"= ~1 +",pred,"+ lo(",pred,", 3) + lo(",pred,",5)")) # remove as.formula
-# }
+
 formatScope <- function(dat) {
     pred <- colnames(dat[c(4:ncol(dat))]) # assign preds column names
     mod.form2 <- as.list(paste("~1 +",pred,"+ lo(",pred,", 3) + lo(",pred,",5)")) #
@@ -252,7 +248,12 @@ gamFunction <- function(catData, rasters) {
   out<- lapply(out,as.formula) ##
   names(out) <- colnames(cutData[c(4:ncol(cutData))]) # new
   mod2.LR <-step.Gam(mod1.LR, scope=out) #new
-  
+  #table
+  plot.new()
+  table <- summary(mod2.LR)
+  t <- as.data.frame(table$coefficients) %>% mutate_if(is.numeric, ~round(., 5))
+  grid.draw(tableGrob(t))
+  #
   mod2.pred <- predict(mod2.LR, type = "response")
   mod1 <- "mod2.LR"
   dat2 <-cbind(mod1, cutData[1], mod2.pred)

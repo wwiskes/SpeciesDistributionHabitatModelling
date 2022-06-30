@@ -220,7 +220,7 @@ glmFunction <- function(cutData, rasters) {
   mod2.accB <- presence.absence.accuracy(dat2, threshold = mod.cut.GLM$mod2.pred, st.dev = F)
   tss <- mod2.accB$sensitivity+mod2.accB$specificity-1
   
-  mod2.accB <- cbind(mod2.accB[1:7], tss)
+  mod2.accB <- cbind(mod2.accB[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
   plot.new()
   grid.draw(tableGrob(mod2.accB))
   #end acc assess
@@ -250,7 +250,7 @@ gamFunction <- function(catData, rasters) {
   mod2.LR <-step.Gam(mod1.LR, scope=out) #new
   #table
   plot.new()
-  table <- summary(mod2.LR)
+  table <- summary(mod1.LR)
   t <- as.data.frame(table$anova) %>% mutate_if(is.numeric, ~round(., 5))
   grid.draw(tableGrob(t))
   #
@@ -261,7 +261,7 @@ gamFunction <- function(catData, rasters) {
   #start acc ass
   mod0.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.GLM$mod2.pred, st.dev = F)
   tss <- mod0.acc$sensitivity+mod0.acc$specificity -1
-  mod0.acc <- cbind(mod0.acc[1:7], tss)
+  mod0.acc <- cbind(mod0.acc[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
   plot.new()
   grid.draw(tableGrob(mod0.acc))
 
@@ -322,7 +322,7 @@ maxFunction <- function(cutData, rasters) {
   #acc ass
   mod1.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.MAXENT$spec_sens, st.dev = F)
   tss <- mod1.acc$sensitivity + mod1.acc$specificity - 1
-  mod1.acc <- cbind(mod1.acc[1:7], tss)
+  mod1.acc <- cbind(mod1.acc[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
   plot.new()
   grid.draw(tableGrob(mod1.acc))
   #
@@ -353,9 +353,9 @@ rafFunction <- function(data, cut) {
     mod.cut.RF <- optimal.thresholds(dat2, opt.methods = c("ReqSens"), req.sens = 0.95)
     mod1.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.RF$mod1.pred, st.dev = F)
     tss <- mod1.acc$sensitivity + mod1.acc$specificity -1
-    mod1.acc <- cbind(mod1.acc[1:7], tss)
+    mod1.acc <- cbind(mod1.acc[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
     plot.new()
-    grid.draw(tableGrob(mod1.acc))
+    grid.draw(tableGrob(mod1.acc)) 
     #
     oob.acc <- presence.absence.accuracy(dat2, st.dev = F)
     tss <-oob.acc$sensitivity + oob.acc$specificity - 1
@@ -389,7 +389,7 @@ brtFunction <- function(data, cut) {
     #acc as
     mod1.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.BRT$pred, st.dev = F)
     tss <- mod1.acc$sensitivity + mod1.acc$specificity - 1
-    mod1.acc.brt <- cbind(mod1.acc[1:7], tss)
+    mod1.acc.brt <- cbind(mod1.acc[1:7], tss)  %>% mutate_if(is.numeric, ~round(., 5))
     plot.new()
     grid.draw(tableGrob(mod1.acc.brt))
     #

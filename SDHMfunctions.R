@@ -258,19 +258,20 @@ gamFunction <- function(catData, rasters) {
   mod1 <- "mod2.LR"
   dat2 <-cbind(mod1, cutData[1], mod2.pred)
   mod.cut.GLM <- optimal.thresholds(dat2, opt.methods = c("Default"))
-  #start acc ass
-  mod0.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.GLM$mod2.pred, st.dev = F)
-  tss <- mod0.acc$sensitivity+mod0.acc$specificity -1
-  mod0.acc <- cbind(mod0.acc[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
-  plot.new()
-  grid.draw(tableGrob(mod0.acc))
-
-  #
+#
   jack <- nrow(cutData)
   mod3.jack5 <- CVbinary(mod2.LR, nfolds = 3, print.details = F)
   mod3.jack5 <- mod3.jack5$cvhat
   dat3 <- cbind(dat2, mod3.jack5)
   auc.roc.plot(dat3, color = T)
+  #
+  #start acc ass
+  mod0.acc <- presence.absence.accuracy(dat3, threshold = mod.cut.GLM$mod2.pred, st.dev = F) #dat2
+  tss <- mod0.acc$sensitivity+mod0.acc$specificity -1
+  mod0.acc <- cbind(mod0.acc[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
+  plot.new()
+  grid.draw(tableGrob(mod0.acc))
+  
   #
   modFprob.LR <- predict(rasters, mod2.LR, type = "response", fun = predict, index = 2)
   modFclas.GAM <- reclassify(modFprob.LR, (c(0, mod.cut.GLM$mod2.pred, 0, mod.cut.GLM$mod2.pred, 1, 1)))
@@ -320,13 +321,13 @@ maxFunction <- function(cutData, rasters) {
   optimal.thresholds(dat2, opt.method = c(4,3))
   mod1.cfmat <- table(dat2[[2]], factor(as.numeric(dat2$mod1.pred >= mod.cut.MAXENT$spec_sens)))
   #acc ass
+  auc.roc.plot(dat2, color = T)
   mod1.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.MAXENT$spec_sens, st.dev = F)
   tss <- mod1.acc$sensitivity + mod1.acc$specificity - 1
   mod1.acc <- cbind(mod1.acc[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
   plot.new()
   grid.draw(tableGrob(mod1.acc))
   #
-  auc.roc.plot(dat2, color = T)
   mod1.MAXprob = predict(mod1.MAX, rasters)
   mod1.MAXclas = reclassify(mod1.MAXprob, c(0,mod.cut.MAXENT[[2]],0,mod.cut.MAXENT[[2]],1,1))
   mod1.MAXclas 
@@ -387,6 +388,7 @@ brtFunction <- function(data, cut) {
 
     mod1.cfmatX <- table(dat2[[2]], factor(as.numeric(dat2$cvpred >= mod.cut.BRT$cvpred)))
     #acc as
+    auc.roc.plot(dat2, color = T)
     mod1.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.BRT$pred, st.dev = F)
     tss <- mod1.acc$sensitivity + mod1.acc$specificity - 1
     mod1.acc.brt <- cbind(mod1.acc[1:7], tss)  %>% mutate_if(is.numeric, ~round(., 5))
@@ -396,6 +398,5 @@ brtFunction <- function(data, cut) {
     mod1.BRTprob = predict(cut, mod1.BRT, n.trees = mod1.BRT$gbm.call$best.trees, type = "response")
     mod1.BRTclas <- reclassify(mod1.BRTprob, c(0,mod.cut.BRT[[2]],0,mod.cut.BRT[[2]],1,1))
     
-    auc.roc.plot(dat2, color = T)
     mod1.BRTclas
 }

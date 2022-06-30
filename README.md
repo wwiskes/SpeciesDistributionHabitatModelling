@@ -46,7 +46,7 @@ Select the machine type, I have found personally through testing that the bottle
 
 After you click 'Create' you should see your notebook in your workbench. Now click 'Open JupyterLab':
 
-![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture7.PNG)
+![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture7.PNG?)
 
 Now a page will open with your Jupyter environment. Click the Git symbol to connect to a repository. Paste in: https://github.com/wwiskes/SpeciesDistributionHabitatModelling.git
 

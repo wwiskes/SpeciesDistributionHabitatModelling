@@ -18,6 +18,8 @@ This will clone this repository into your virtual machine, anytime you want to s
 
 # Tutorial to run in the cloud
 
+This tutorial assumes you have access to the Google Cloud Platform, are proficient in the R programming language, and are capable of installing the required R libraries in a linux environment.
+
 First navigate to the GCP project you wish to use:
 
 ![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture.PNG)

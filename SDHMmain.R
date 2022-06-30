@@ -101,6 +101,10 @@ rasters <- rasterStack(cutData, rasterList, column_names)
 #optional, crop rasters to the modelling extent.
 rasters <- crop(rasters, ext)
 
+##########################################START TESTING
+source("SDHMfunctions.R")
+############################################END TESTING
+
 #Generalized linear model
 glm <- glmFunction(cutData, rasters)
 
@@ -125,9 +129,6 @@ raf <- rafFunction(cutData, rasters)
 plot(raf)
 plot(blob$geometry, add =T)
 
-##########################################START TESTING
-source("SDHMfunctions.R")
-############################################END TESTING
 #Boosted Regression Tree model
 brt <- brtFunction(cutData, rasters)
 

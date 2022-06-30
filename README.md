@@ -15,4 +15,6 @@ https://github.com/wwiskes/SpeciesDistributionHabitatModelling.git
 
 This will clone this repository into your virtual machine, anytime you want to sync to check for new code revisions simply open the "Git" tab and select "Pull from Remote (force)". This will ensure you have the most recent version of this script.
 
-Thanks and happy modelling. 
+
+Tutorial:
+![alt text](http://dasacounseling.weebly.com/uploads/5/6/1/4/56149545/2263864_orig.jpg)

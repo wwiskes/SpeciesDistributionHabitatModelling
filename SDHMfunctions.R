@@ -251,7 +251,7 @@ gamFunction <- function(catData, rasters) {
   #table
   plot.new()
   table <- summary(mod2.LR)
-  t <- as.data.frame(table$anova) %>% mutate_if(is.numeric, ~round(., 5))
+  t <- as.data.frame(table$anova) %>% mutate_if(is.numeric, ~round(., 5)) %>% na.omit()
   grid.draw(tableGrob(t))
   #
   mod2.pred <- predict(mod2.LR, type = "response")

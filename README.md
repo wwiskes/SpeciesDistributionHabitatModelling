@@ -17,4 +17,5 @@ This will clone this repository into your virtual machine, anytime you want to s
 
 
 Tutorial:
-![alt text](http://dasacounseling.weebly.com/uploads/5/6/1/4/56149545/2263864_orig.jpg)
+
+![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture.PNG)

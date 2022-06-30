@@ -38,7 +38,7 @@ Select Debian as the operating system and R as the environment:
 
 ![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture5.PNG)
 
-Select the machine type, I have found personally through testing that the bottle neck with species distribution modelling is not RAM (like most people often say), but CPU, so I chose a high CPU machine:
+Select the machine type, I have found personally through testing that the bottle neck with species distribution modelling is not RAM (like most people often say), but CPU, so I always choose a high CPU machine. I highly reccomend using a compute optimized machine (C2), over an E2 or N2, as C2 instances are tuned for the High-performance computing (HPC) that SDHMs require. By keeping the RAM low we can boost up the CPU while keeping costs resonable. Next time you're running a SDHM open a terminal and type 'top' - this will display your resource consumption. 
 
 ![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture6.PNG)
 

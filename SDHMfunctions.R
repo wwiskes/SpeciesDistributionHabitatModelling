@@ -250,7 +250,7 @@ gamFunction <- function(catData, rasters) {
   mod2.LR <-step.Gam(mod1.LR, scope=out) #new
   #table
   plot.new()
-  table <- summary(mod1.LR)
+  table <- summary(mod2.LR)
   t <- as.data.frame(table$anova) %>% mutate_if(is.numeric, ~round(., 5))
   grid.draw(tableGrob(t))
   #

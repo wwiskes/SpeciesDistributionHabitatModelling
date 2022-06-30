@@ -1,6 +1,6 @@
 # Species Distribution Habitat Modelling (SDHM)
  
-In this repository are two scripts designed to create species distribution models from known presence locations. SDHMmain is the primary script where you input your data, set your parameters, select your predictors, and recieve your output. SDHMfunctions is a script containing functions written to make the main script run, you should never need to alter the functions script. Also provided is a CSV of random points throughout the state of Utah, provided as a placeholder for your own data.
+In this repository are two scripts designed to create species distribution models from known presence locations. SDHMmain is the primary script where you input your data, set your parameters, select your predictors, and receive your output. SDHMfunctions is a script containing functions written to make the main script run, you should never need to alter the functions script. Also provided is a CSV of random points throughout the state of Utah, provided as a placeholder for your own data.
 
 The package contained in this repository has everything needed to complete a test run of the functions.
 
@@ -40,7 +40,7 @@ Select Debian as the operating system and R as the environment:
 
 ![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture5.PNG)
 
-Select the machine type, I have found personally through testing that the bottle neck with species distribution modelling is not RAM (like most people often say), but CPU, so I always choose a high CPU machine. I highly reccomend using a compute optimized machine (C2), over an E2 or N2, as C2 instances are tuned for the High-performance computing (HPC) that SDHMs require. By keeping the RAM low we can boost up the CPU while keeping costs resonable. Next time you're running a SDHM open a linux terminal and type 'top' - this will display your resource consumption. 
+Select the machine type, I have found personally through testing that the bottle neck with species distribution modelling is not RAM (like most people often say), but CPU, so I always choose a high CPU machine. I highly recommend using a compute optimized machine (C2), over an E2 or N2, as C2 instances are tuned for the High-performance computing (HPC) that SDHMs require. By keeping the RAM low we can boost up the CPU while keeping costs reasonable. Next time you're running a SDHM open a linux terminal and type 'top' - this will display your resource consumption. 
 
 ![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture6.PNG)
 

@@ -25,3 +25,38 @@ First navigate to the GCP project you wish to use:
 Next search for Vertex AI:
 
 ![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture2.PNG)
+
+Once in Vertex AI select the 'Workbench' tab and click 'Create Notebook':
+
+![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture3.PNG)
+
+Give the notebook a creative name and select the region closest to you:
+
+![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture4.PNG)
+
+Select Debian as the operating system and R as the environment:
+
+![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture5.PNG)
+
+Select the machine type, I have found personally through testing that the bottle neck with species distribution modelling is not RAM (like most people often say), but CPU, so I chose a high CPU machine:
+
+![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture6.PNG)
+
+After you click 'Create' you should see your notebook in your workbench. Now click 'Open JupyterLab':
+
+![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture7.PNG)
+
+Now a page will open with your Jupyter environment. Click the Git symbol to connect to a repository. Paste in: https://github.com/wwiskes/SpeciesDistributionHabitatModelling.git
+
+![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture8.PNG)
+
+Navigate to the script titled 'SDHMmain' and open it with a notebook:
+
+![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture9.PNG)
+
+Use 'Pull from Remote (force)' to pull in new revisions of this code:
+
+![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture10.PNG)
+
+
+Thanks and happy modelling!

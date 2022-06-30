@@ -16,7 +16,7 @@ https://github.com/wwiskes/SpeciesDistributionHabitatModelling.git
 This will clone this repository into your virtual machine, anytime you want to sync to check for new code revisions simply open the "Git" tab and select "Pull from Remote (force)". This will ensure you have the most recent version of this script.
 
 
-Tutorial to run in the cloud:
+# Tutorial to run in the cloud:
 
 First navigate to the GCP project you wish to use:
 

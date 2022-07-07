@@ -69,12 +69,22 @@ pointPseudo <- pseudoFunction(pointSF, blob, temp)
 head(pointPseudo) #x&y columns always lat/long
 
 #Make your list of rasters from the document found here (lists can be any length greater than 1):
+#Shown below is the 'standard' stack for all 1km resolution variables in the state of Utah
 # https://storage.googleapis.com/predictors_structure/structure.csv
 rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_ut.tif",
+                "terrestrial/landfire/dist/1km/lf_allvars_dist_ut.tif",
                 "terrestrial/landfire/topo/1km/lf_allvars_topo_ut.tif",
                 "terrestrial/landfire/veg/1km/lf_allvars_veg_ut.tif",
+                "terrestrial/nlcd/1km/nlcd_allvars_veg_ut.tif",
+                "terrestrial/polaris/soil/1km/polaris_allvars_ut.tif",
+                "terrestrial/usfws/km_1/prism/ppt_30yr_normal_stack_ut.tif",
+                "terrestrial/usfws/km_1/prism/tmax_30yr_normal_stack_ut.tif",
+                "terrestrial/usfws/km_1/prism/tmin_30yr_normal_stack_ut.tif",
                 "terrestrial/usfws/km_1/usfws_allvars_clim_ut.tif", 
+                "terrestrial/usfws/km_1/usfws_allvars_geo_ut.tif",
                 "terrestrial/usfws/km_1/usfws_allvars_hydro_ut.tif",
+                "terrestrial/usfws/km_1/usfws_allvars_soil_ut.tif",
+                "terrestrial/usfws/km_1/usfws_allvars_topo_ut.tif",
                 "terrestrial/usfws/km_1/usfws_allvars_veg_ut.tif")
 
 #Run your point data against the rasters to extract the prediction values

@@ -96,8 +96,8 @@ head(data)
 #set the threshold at which a column is no longer statistically relevant
 cut <- 0.8
 # declare list of columns to preserve or remove regardless of spearmans. To leave blank use: <- c("")
-preserve <- c("gm_tr")
-remove <- c("gm_hli")
+preserve <- c("")
+remove <- c("")
 #remove warnings
 options (warn = - 1)
 #remove columns without statistical correlation, with exception to preserve/remove

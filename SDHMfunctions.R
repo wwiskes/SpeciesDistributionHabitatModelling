@@ -12,7 +12,7 @@ queryPostgres <- function(species) {
     con <- dbConnect(RPostgres::Postgres(), dbname = db, host=host_db, port=db_port, user=db_user, password=db_password)  
     query <- dbSendQuery(con, paste0("SELECT * FROM ",species))
     occs <- dbFetch(query)
-    occs %>% drop_na()
+    occs[,1:3] %>% drop_na()
 }
 
 

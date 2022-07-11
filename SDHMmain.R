@@ -56,6 +56,8 @@ head(pointSF)
 ext <- extent(pointSF)
 blob <- st_as_sf(as(ext, "SpatialPolygons"))
 st_crs(blob) <- proj 
+#set buffer, buffer distance is in meters
+blob <- st_buffer(blob, 5000)
 #from study area:
 ext <- extent(blob)
 #crop modelling extent template

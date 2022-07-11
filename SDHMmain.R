@@ -35,7 +35,7 @@ pointData <- read.csv("randompoints.csv")
 #The third column must be Y (latitude)
 ########################
 # it is also an option to pull data from a postgres database
-# pointData <- queryPostgres("ybcu") 
+# pointData <- queryPostgres("dkm") 
 # queryPostgres code will not run without a env script.
 
 # +

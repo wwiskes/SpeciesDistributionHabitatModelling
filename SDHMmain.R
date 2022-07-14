@@ -154,5 +154,5 @@ plot(ensemble, axes = T, main = "concordance Class map: Ramp")
 plot(blob$geometry, add =T)
 
 
-
+writeRaster(ensemble, filename = "ensemble.img", overwrite = T)
 

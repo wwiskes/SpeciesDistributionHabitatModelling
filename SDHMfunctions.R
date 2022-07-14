@@ -105,7 +105,7 @@ pseudoFunction <- function(pointSF, blob, temp) {
     PPSA
 }
 
-#This function removes columns from the data coorelated to eachother according to spearmans 
+#This function removes columns from the data correlated to eachother according to spearmans 
 #additional remove or preserve columns are added/removed based on lists within their respective variable names
 cutFunction <- function(data, cut, preserve, remove) {
     #remove non-data columns
@@ -164,8 +164,8 @@ cutFunction <- function(data, cut, preserve, remove) {
     data <- data[, (colnames(data) %in% c('sppres','x','y',colnames(names)))]
         }
     #data = na.omit(data)
-    #again check for and remove NAs
-    data = data[ , colSums(is.na(data)) == 0]
+    #uncomment to check for and remove NAs
+    #data = data[ , colSums(is.na(data)) == 0]
     output <- list(data,df1)
 } 
 
@@ -313,6 +313,9 @@ maxFunction <- function(cutData, rasters) {
   
   tmp.p <- cbind(as.data.table(modl), as.data.table(ybcu.tr.p[1]), as.data.table(mod1.pred))###############################################################<-
   mod1.pred <- bak.pred
+  #pad shortest vector with NA's to have same length as longest vector
+  length(mod1.pred) <- length(bak.xy[3])
+  #
   tmp.b <- cbind(modl, bak.xy[3], mod1.pred)
   dat2 <- data.frame(rbind(tmp.p, tmp.b))
   mod.cut.MAXENT <- threshold(mod1.val)

@@ -165,7 +165,7 @@ cutFunction <- function(data, cut, preserve, remove) {
         }
     #data = na.omit(data)
     #uncomment to check for and remove NAs
-    #data = data[ , colSums(is.na(data)) == 0]
+    data = data[ , colSums(is.na(data)) == 0]
     output <- list(data,df1)
 } 
 

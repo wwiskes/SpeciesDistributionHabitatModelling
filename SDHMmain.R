@@ -56,8 +56,9 @@ head(pointSF)
 ext <- extent(pointSF)
 blob <- st_as_sf(as(ext, "SpatialPolygons"))
 st_crs(blob) <- proj 
-#set buffer, buffer distance is in meters
+#set buffer, buffer distance is in meters (& crop outside modelling frame)
 blob <- st_buffer(blob, 5000)
+blob <- st_crop(blob, extent(fnetSF))
 #from study area:
 ext <- extent(blob)
 #crop modelling extent template
@@ -91,6 +92,8 @@ rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_ut.tif",
 
 #Run your point data against the rasters to extract the prediction values
 data <- extractStack(pointPseudo, rasterList)
+## Remove columns and rows with more than 50% NA
+data<- data[which(rowMeans(!is.na(data)) > 0.5), which(colMeans(!is.na(data)) > 0.5)]
 column_names <- colnames(head(data)[,9:ncol(data)])
 head(data)
 #set the threshold at which a column is no longer statistically relevant

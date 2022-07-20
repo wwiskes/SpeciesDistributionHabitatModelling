@@ -72,8 +72,9 @@ pointPseudo <- pseudoFunction(pointSF, blob, temp)
 head(pointPseudo) #x&y columns always lat/long
 
 #Make your list of rasters from the document found here (lists can be any length greater than 1):
-#Shown below is the 'standard' stack for all 1km resolution variables in the state of Utah
+#Shown below are the 'standard' stacks for all stacked variables in the format extent/resolution
 # https://storage.googleapis.com/predictors_structure/structure.csv
+#Utah/1km
 rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_ut.tif",
                 "terrestrial/landfire/dist/1km/lf_allvars_dist_ut.tif",
                 "terrestrial/landfire/topo/1km/lf_allvars_topo_ut.tif",
@@ -89,6 +90,65 @@ rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_ut.tif",
                 "terrestrial/usfws/km_1/usfws_allvars_soil_ut.tif",
                 "terrestrial/usfws/km_1/usfws_allvars_topo_ut.tif",
                 "terrestrial/usfws/km_1/usfws_allvars_veg_ut.tif")
+#Utah/100m
+rasterList <- c("terrestrial/gradientmetrics/topo/100m/gm_allvars_topo_ut.tif",
+                "terrestrial/landfire/topo/100m/lf_allvars_topo_ut.tif",
+                "terrestrial/landfire/veg/100m/lf_allvars_veg_ut.tif",
+                "terrestrial/nlcd/100m/nlcd_allvars_ut.tif",
+                "terrestrial/polaris/soil/100m/polaris_allvars_ut.tif",
+                "terrestrial/usfws/m_100/ppt_stack_100m_ut.tif",
+                'terrestrial/usfws/m_100/tmax_stack_100m_ut.tif',
+                "terrestrial/usfws/m_100/tmin_stack_100m_ut.tif",
+                "terrestrial/usfws/m_100/usfws_climate_100m_stack_ut.tif",
+                "terrestrial/usfws/m_100/usfws_geo_100m_stack_ut.tif",
+                "terrestrial/usfws/m_100/usfws_hydro_100m_stack_ut.tif",
+                "terrestrial/usfws/m_100/usfws_topo_100m_stack_ut.tif")
+#Utah/30m
+rasterList <- c("terrestrial/gradientmetrics/topo/30m/gm_allvars_topo_ut.tif",
+                "terrestrial/gradientmetrics/topo/gm_allvars_topo_ut.tif",
+                "terrestrial/landfire/dist/lf_allvars_dist_ut.tif",
+                "terrestrial/landfire/topo/30m/lf_allvars_topo_ut.tif",
+                "terrestrial/landfire/topo/lf_allvars_topo_ut.tif",
+                "terrestrial/landfire/veg/30m/lf_allvars_veg_ut.tif",
+                "terrestrial/landfire/veg/lf_allvars_veg_ut.tif",
+                "terrestrial/nlcd/30m/nlcd_allvars_ut.tif",
+                "terrestrial/nlcd/veg/nlcd_allvars_ut.tif",
+                "terrestrial/polaris/soil/polaris_allvars_ut.tif",
+                "terrestrial/statsgo/soil/statsgo_allvars_ut.tif")
+#WNA/1km
+rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_wna.tif",
+                "terrestrial/landfire/dist/1km/lf_allvars_dist_wna.tif",
+                "terrestrial/landfire/topo/1km/lf_allvars_topo_wna.tif",
+                "terrestrial/landfire/veg/1km/lf_allvars_veg_wna.tif",
+                "terrestrial/usfws/km_1/usfws_allvars_clim_wna.tif",
+                "terrestrial/usfws/km_1/usfws_allvars_geo_wna.tif",
+                "terrestrial/usfws/km_1/usfws_allvars_hydro_wna.tif",
+                "terrestrial/usfws/km_1/usfws_allvars_soil_wna.tif",
+                "terrestrial/usfws/km_1/usfws_allvars_topo_wna.tif",
+                "terrestrial/usfws/km_1/usfws_allvars_veg_wna.tif",
+                "terrestrial/usfws/km_1/prism/tmax_30yr_normal_stack_wna.tif",
+                "terrestrial/usfws/km_1/prism/ppt_30yr_normal_stack_wna.tif",
+                "terrestrial/usfws/km_1/prism/t,tmin_30yr_normal_stack_wna.tif",
+                "terrestrial/polaris/soil/1km/polaris_allvars_wna.tif")
+#WNA/100m
+rasterList <- c("terrestrial/usfws/m_100/usfws_climate_100m_stack_wna.tif",
+                "terrestrial/usfws/m_100/tmin_stack_100m_wna.tif",
+                "terrestrial/usfws/m_100/usfws_geo_100m_stack_wna.tif",
+                "terrestrial/usfws/m_100/tmax_stack_100m_wna.tif",
+                "terrestrial/usfws/m_100/usfws_hydro_100m_stack_wna.tif",
+                "terrestrial/usfws/m_100/ppt_stack_100m_wna.tif",
+                "terrestrial/usfws/m_100/usfws_topo_100m_stack_wna.tif")
+#WNA/30m
+rasterList <- c("terrestrial/gradientmetrics/topo/gm_allvars_topo_wna.tif",
+                "terrestrial/landfire/dist/lf_allvars_dist_wna.tif",
+                "terrestrial/landfire/topo/lf_allvars_topo_wna.tif",
+                "terrestrial/landfire/veg/lf_allvars_veg_wna.tif",
+                "terrestrial/polaris/soil/polaris_allvars_wna.tif")
+
+
+
+
+
 
 #Run your point data against the rasters to extract the prediction values
 data <- extractStack(pointPseudo, rasterList)

@@ -92,9 +92,9 @@ rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_ut.tif",
 
 #Run your point data against the rasters to extract the prediction values
 data <- extractStack(pointPseudo, rasterList)
-## Remove columns and rows with more than 50% NA
-data<- data[which(rowMeans(!is.na(data)) > 0.5), which(colMeans(!is.na(data)) > 0.5)]
 column_names <- colnames(head(data)[,9:ncol(data)])
+## Remove columns and rows with more than 50% NA
+data<- data[which(rowMeans(!is.na(data[,9:ncol(data)])) > 0.5), which(colMeans(!is.na(data)[,9:ncol(data)]) > 0.5)]
 head(data)
 #set the threshold at which a column is no longer statistically relevant
 cut <- 0.8

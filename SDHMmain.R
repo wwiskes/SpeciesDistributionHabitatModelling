@@ -126,9 +126,8 @@ head(pointSF)
 ext <- extent(pointSF)
 blob <- st_as_sf(as(ext, "SpatialPolygons"))
 st_crs(blob) <- proj 
-#set buffer, buffer distance is in meters (& crop outside modelling frame)
+#set buffer, buffer distance is in meters WARNING, make certain buffer does not extend outside raster extent
 blob <- st_buffer(blob, 5000)
-blob <- st_crop(blob, extent(fnetSF))
 #from study area:
 ext <- extent(blob)
 

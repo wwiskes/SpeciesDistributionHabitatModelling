@@ -51,11 +51,11 @@ pseudoFunction <- function(pointSF, blob, temp) {
     blob$in_frame <- 1
     frame <-rasterize(blob,temp, "in_frame")
 
-    #Make fnet into dataframe
-    fnetSF <-st_read("/vsicurl/https://storage.googleapis.com/predictors_public/bounds/km1_fnet.geojson", crs = proj)
-    fnetSF <- st_crop(fnetSF, blob)
-    fnetDF <- as.data.frame(fnetSF)
-    fnetDF <- fnetDF[,1:3]
+    #Make fnet
+    f1 <- sp::coordinates(temp) # get spatial coords 
+    f2 <- cellFromXY(temp, f1) # grab cell number for each [X,Y] coordinate value
+    fnetDF <- as.data.frame(cbind(f2, f1)) # build dataframe
+    names(fnetDF) <- c("FNETID", "cell_aea_x", "cell_aea_y")
 
     ##### pseudo abs
 

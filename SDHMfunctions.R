@@ -52,7 +52,7 @@ pseudoFunction <- function(pointSF, blob, temp) {
     frame <-rasterize(blob,temp, "in_frame")
 
     #Make fnet into dataframe
-
+    fnetSF <-st_read("/vsicurl/https://storage.googleapis.com/predictors_public/bounds/km1_fnet.geojson", crs = proj)
     fnetSF <- st_crop(fnetSF, blob)
     fnetDF <- as.data.frame(fnetSF)
     fnetDF <- fnetDF[,1:3]

@@ -120,7 +120,6 @@ coords <- colnames(head(pointData)[,2:3])
 pointSF <- st_as_sf(pointData, coords = coords, crs = proj)
 head(pointSF)
 
-# +
 #Set Extent
 #The extent is set from the study area named "Blob", if you do not have a study area you 
 #can generate one from your point data below
@@ -133,7 +132,6 @@ blob <- st_crop(blob, extent(fnetSF))
 #from study area:
 ext <- extent(blob)
 
-
 #Load in modelling extent. Currently do not have 30m for WNA
 #1km works for WNA and Utah
 temp <- raster("/vsicurl/https://storage.googleapis.com/predictors_public/bounds/1km_template.tif")
@@ -143,7 +141,6 @@ temp <- raster("/vsicurl/https://storage.googleapis.com/predictors_public/bounds
 #temp <- raster("/vsicurl/https://storage.googleapis.com/predictors_public/bounds/30m_template.tif")
 #crop modelling extent template
 temp <- crop(temp, ext)
-# -
 
 #Generate pseudo absences from the extent of the study area
 #Needs the points simple feature, the blob geojson, and the template raster

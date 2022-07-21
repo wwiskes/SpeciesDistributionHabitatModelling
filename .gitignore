@@ -7,3 +7,5 @@ env.R
 .RDataTmp
 
 ensemble*
+
+fnet*

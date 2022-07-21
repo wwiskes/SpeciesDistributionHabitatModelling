@@ -18,8 +18,6 @@ source("SDHMfunctions.R")
 proj <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs "
 #Load in Utah 1km bounds - modelling extent
 temp <- raster("/vsicurl/https://storage.googleapis.com/predictors_public/bounds/1km_template.tif")
-#Load in Fnet, currently we only have a 1km FNET for Utah, this FNET will only work with the Utah/1km stack
-fnetSF <-st_read("/vsicurl/https://storage.googleapis.com/predictors_public/bounds/km1_fnet.geojson", crs = proj)
 
 #Make your list of rasters from the document found here (lists can be any length greater than 1):
 #Shown below are the 'standard' stacks for all stacked variables in the format extent/resolution

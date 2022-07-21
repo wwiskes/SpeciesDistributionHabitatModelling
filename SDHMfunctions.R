@@ -204,11 +204,21 @@ glmFunction <- function(cutData, rasters) {
   mod1 <- "mod2.LR"
   dat2 <-cbind(mod1, cutData[1], mod2.pred)
   mod.cut.GLM <- optimal.thresholds(dat2, opt.methods = c("Default"))
-  #table
-  plot.new()
+  ##table
+  # plot.new()
   table <- summary(mod2.LR)
-  t <- as.data.frame(table$coefficients) %>% mutate_if(is.numeric, ~round(., 5))
-  grid.draw(tableGrob(t))
+  t <- as.data.frame(table$coefficients) %>% 
+    mutate_if(is.numeric, ~round(., 5))
+  t <- t[order( t[,ncol(t)] ),]
+  # grid.draw(tableGrob(t))
+  grid.newpage()
+  vp <- viewport(x = 0.4, y = 0.35, width = 1, height = 5) 
+  grid.rect(vp = vp)
+  tg <- tableGrob(t, vp = vp)
+  # tg$widths[-1] <- rep(unit(1/2,"null"), 2)
+  # tg$heights <- rep(unit(1/nrow(tg), "null"), nrow(tg))
+  grid.draw(tg)
+  
   #start accuracy assessment
 
   jack <- nrow(cutData)

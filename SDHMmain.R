@@ -16,8 +16,6 @@ options(scipen = 999)#disabling scientific notation - important for table readab
 source("SDHMfunctions.R")
 #The data must be in EPSG 5070. The proj4string below is for 5070, if you are running this script in the cloud you must use proj4
 proj <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs "
-#Load in Utah 1km bounds - modelling extent
-temp <- raster("/vsicurl/https://storage.googleapis.com/predictors_public/bounds/1km_template.tif")
 
 #Make your list of rasters from the document found here (lists can be any length greater than 1):
 #Shown below are the 'standard' stacks for all stacked variables in the format extent/resolution
@@ -134,6 +132,15 @@ blob <- st_buffer(blob, 5000)
 blob <- st_crop(blob, extent(fnetSF))
 #from study area:
 ext <- extent(blob)
+
+
+#Load in modelling extent. Currently do not have 30m for WNA
+#1km works for WNA and Utah
+temp <- raster("/vsicurl/https://storage.googleapis.com/predictors_public/bounds/1km_template.tif")
+#100m works for WNA and Utah
+#temp <- raster("/vsicurl/https://storage.googleapis.com/predictors_public/bounds/100m_template_wna.tif")
+#30m works ONLY for Utah
+#temp <- raster("/vsicurl/https://storage.googleapis.com/predictors_public/bounds/30m_template.tif")
 #crop modelling extent template
 temp <- crop(temp, ext)
 # -

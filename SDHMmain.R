@@ -84,7 +84,7 @@ rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_ut.tif",
 #                 "terrestrial/usfws/m_100/usfws_hydro_100m_stack_wna.tif",
 #                 "terrestrial/usfws/m_100/ppt_stack_100m_wna.tif",
 #                 "terrestrial/usfws/m_100/usfws_topo_100m_stack_wna.tif")
-# #WNA/30m
+# #WNA/30m - we do not yet have a template for this resolution at WNA scale
 # rasterList <- c("terrestrial/gradientmetrics/topo/gm_allvars_topo_wna.tif",
 #                 "terrestrial/landfire/dist/lf_allvars_dist_wna.tif",
 #                 "terrestrial/landfire/topo/lf_allvars_topo_wna.tif",

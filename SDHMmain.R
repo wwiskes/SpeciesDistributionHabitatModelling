@@ -11,7 +11,7 @@ library(raster)
 library(sp)
 library(sf)
 library(dplyr) # data manipulation
-options(scipen = 999)#disabling scientific notation - important for table readability 
+#options(scipen = 999)#disabling scientific notation
 #load in functions
 source("SDHMfunctions.R")
 #The data must be in EPSG 5070. The proj4string below is for 5070, if you are running this script in the cloud you must use proj4

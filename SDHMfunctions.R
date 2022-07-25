@@ -364,7 +364,7 @@ formatRaf <- function(dat) {
 }
 rafFunction <- function(data, cut) {   
     mod1.RF <- randomForest(formatRaf(data), importance = T, keep.forest = T, data = data)
-    varImpPlot(mod1.RF, main = "Variable Importance Plots")
+    varImpPlot(mod1.RF,type=2)
     mod1.pred <- predict(mod1.RF, type = "prob")[,2]
     modl <- "mod1.RF"
     dat2 <- cbind(modl, data[1], mod1.pred)

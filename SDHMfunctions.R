@@ -259,16 +259,22 @@ gamFunction <- function(catData, rasters) {
   names(out) <- colnames(cutData[c(4:ncol(cutData))]) # new
   mod2.LR <-step.Gam(mod1.LR, scope=out) #new
   #table
-  plot.new()
   table <- summary(mod2.LR)
-  t <- as.data.frame(table$anova) %>% mutate_if(is.numeric, ~round(., 5)) %>% na.omit()
-  grid.draw(tableGrob(t))
+  t <- as.data.frame(table$anova) %>%
+    mutate_if(is.numeric, ~round(., 5)) %>% 
+    na.omit()
+  t <- t[order( t[,1] ),]
+  grid.newpage()
+  vp <- viewport(x = 0.4, y = 0.35, width = 1, height = 5) 
+  grid.rect(vp = vp)
+  tg <- tableGrob(t, vp = vp)
+  grid.draw(tg)
   #
   mod2.pred <- predict(mod2.LR, type = "response")
   mod1 <- "mod2.LR"
   dat2 <-cbind(mod1, cutData[1], mod2.pred)
   mod.cut.GLM <- optimal.thresholds(dat2, opt.methods = c("Default"))
-#
+  #
   jack <- nrow(cutData)
   mod3.jack5 <- CVbinary(mod2.LR, nfolds = 3, print.details = F)
   mod3.jack5 <- mod3.jack5$cvhat

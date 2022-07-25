@@ -308,7 +308,7 @@ maxFunction <- function(cutData, rasters) {
   mod1.MAX <- maxent(rasters, pres.tr)
   mod2.MAX <- mod1.MAX
   mod2.bak <- randomPoints(rasters, 1000)
-  plot(mod1.MAX)
+  plot(mod1.MAX,cex=.5)
   mod2.val <- evaluate(mod2.MAX, p = pres.tst, a = mod2.bak, x = rasters)
   pts.tst <- data.frame(extract(rasters, pres.tst))
   pts.bak <- data.frame(extract(rasters, mod2.bak))

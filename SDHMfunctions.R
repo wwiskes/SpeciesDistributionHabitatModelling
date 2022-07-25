@@ -27,7 +27,7 @@ extractStack <- function(pointData, rasterList) {
         a <- rasterList[i]
         b <- paste0("/vsicurl/https://storage.googleapis.com/predictors_public/",a)
         c <- stack(b)
-        d <- cbind(d, extract(c, pointData[,c("x","y")]))
+        d <- cbind(d, raster::extract(c, pointData[,c("x","y")]))
         i = i + 1
     }
 d

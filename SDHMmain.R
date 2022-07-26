@@ -41,8 +41,9 @@ rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_ut.tif",
 #                 "terrestrial/landfire/topo/100m/lf_allvars_topo_ut.tif",
 #                 "terrestrial/landfire/veg/100m/lf_allvars_veg_ut.tif",
 #                 "terrestrial/nlcd/100m/nlcd_allvars_ut.tif",
-#                 "terrestrial/polaris/soil/100m/polaris_allvars_ut.tif",
-#                 "terrestrial/usfws/m_100/ppt_stack_100m_ut.tif",
+#                 "terrestrial/polaris/soil/100m/polaris_allvars_ut.tif")
+# #Utah/100m fws only
+# rasterList <- c("terrestrial/usfws/m_100/ppt_stack_100m_ut.tif",
 #                 'terrestrial/usfws/m_100/tmax_stack_100m_ut.tif',
 #                 "terrestrial/usfws/m_100/tmin_stack_100m_ut.tif",
 #                 "terrestrial/usfws/m_100/usfws_climate_100m_stack_ut.tif",
@@ -51,15 +52,10 @@ rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_ut.tif",
 #                 "terrestrial/usfws/m_100/usfws_topo_100m_stack_ut.tif")
 # #Utah/30m
 # rasterList <- c("terrestrial/gradientmetrics/topo/30m/gm_allvars_topo_ut.tif",
-#                 "terrestrial/gradientmetrics/topo/gm_allvars_topo_ut.tif",
 #                 "terrestrial/landfire/dist/lf_allvars_dist_ut.tif",
 #                 "terrestrial/landfire/topo/30m/lf_allvars_topo_ut.tif",
-#                 "terrestrial/landfire/topo/lf_allvars_topo_ut.tif",
 #                 "terrestrial/landfire/veg/30m/lf_allvars_veg_ut.tif",
-#                 "terrestrial/landfire/veg/lf_allvars_veg_ut.tif",
 #                 "terrestrial/nlcd/30m/nlcd_allvars_ut.tif",
-#                 "terrestrial/nlcd/veg/nlcd_allvars_ut.tif",
-#                 "terrestrial/polaris/soil/polaris_allvars_ut.tif",
 #                 "terrestrial/statsgo/soil/statsgo_allvars_ut.tif")
 # #WNA/1km
 # rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_wna.tif",
@@ -88,8 +84,7 @@ rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_ut.tif",
 # rasterList <- c("terrestrial/gradientmetrics/topo/gm_allvars_topo_wna.tif",
 #                 "terrestrial/landfire/dist/lf_allvars_dist_wna.tif",
 #                 "terrestrial/landfire/topo/lf_allvars_topo_wna.tif",
-#                 "terrestrial/landfire/veg/lf_allvars_veg_wna.tif",
-#                 "terrestrial/polaris/soil/polaris_allvars_wna.tif")
+#                 "terrestrial/landfire/veg/lf_allvars_veg_wna.tif")
 
 
 #Load in Utah extent simple feature

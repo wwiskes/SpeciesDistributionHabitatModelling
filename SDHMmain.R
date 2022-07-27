@@ -50,13 +50,11 @@ rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_ut.tif",
 #                 "terrestrial/usfws/m_100/usfws_geo_100m_stack_ut.tif",
 #                 "terrestrial/usfws/m_100/usfws_hydro_100m_stack_ut.tif",
 #                 "terrestrial/usfws/m_100/usfws_topo_100m_stack_ut.tif")
-# #Utah/30m
+# # #Utah/30m
 # rasterList <- c("terrestrial/gradientmetrics/topo/30m/gm_allvars_topo_ut.tif",
-#                 "terrestrial/landfire/dist/lf_allvars_dist_ut.tif",
 #                 "terrestrial/landfire/topo/30m/lf_allvars_topo_ut.tif",
 #                 "terrestrial/landfire/veg/30m/lf_allvars_veg_ut.tif",
-#                 "terrestrial/nlcd/30m/nlcd_allvars_ut.tif",
-#                 "terrestrial/statsgo/soil/statsgo_allvars_ut.tif")
+#                 "terrestrial/nlcd/30m/nlcd_allvars_ut.tif")
 # #WNA/1km
 # rasterList <- c("terrestrial/gradientmetrics/topo/1km/gm_allvars_topo_wna.tif",
 #                 "terrestrial/landfire/dist/1km/lf_allvars_dist_wna.tif",

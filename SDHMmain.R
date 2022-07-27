@@ -146,6 +146,7 @@ column_names <- colnames(head(data)[,9:ncol(data)])
 ## Remove columns and rows with more than 50% NA
 data<- data[which(rowMeans(!is.na(data[,9:ncol(data)])) > 0.5), which(colMeans(!is.na(data)[,9:ncol(data)]) > 0.5)]
 head(data)
+
 #set the threshold at which a column is no longer statistically relevant
 cut <- 0.8
 # declare list of columns to preserve or remove regardless of spearmans. To leave blank use: <- c("")

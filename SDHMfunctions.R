@@ -145,8 +145,9 @@ cutFunction <- function(data, cut, preserve, remove) {
     bad <- names(data) %in% c(BadCol, remove)
     good <- data[!bad]
     #remove predictors with NA
-    removeNA <- names(good) %in% noNA
-    names <- good[removeNA]
+    #removeNA <- names(good) %in% noNA
+    #names <- good[removeNA]
+    names <- good
     names <- names[,9:ncol(names)]
 
     # #count the TRUE

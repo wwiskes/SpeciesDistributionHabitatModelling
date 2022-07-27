@@ -252,7 +252,7 @@ formatScope <- function(dat) {
     pred <- colnames(dat[c(4:ncol(dat))]) # assign preds column names
     mod.form2 <- as.list(paste("~1 +",pred,"+ lo(",pred,", 3) + lo(",pred,",5)")) #
 }
-gamFunction <- function(catData, rasters) {
+gamFunction <- function(cutData, rasters) {
   
   mod1.LR <- gam(formatGam(cutData), family = binomial, data = cutData)
   out<- formatScope(cutData) #new

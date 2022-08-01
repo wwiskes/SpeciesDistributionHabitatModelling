@@ -16,6 +16,18 @@ queryPostgres <- function(species) {
 }
 
 
+library(bigrquery)  
+queryBiobase <- function(species) {
+  library(dplyr)
+  con <- dbConnect(
+    bigquery(),
+    project = "ut-dnr-biobase-dev",
+    dataset = "biobase",
+    billing = "ut-dnr-biobase-dev"
+  )
+  tbl(con, species)
+}
+
 #This is a function to loop through your raster list and punch through your occurrence data
 library(rgdal)
 extractStack <- function(pointData, rasterList) {

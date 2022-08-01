@@ -101,6 +101,9 @@ pointData <- read.csv("randompoints.csv")
 # it is also an option to pull data from a postgres database
 # pointData <- queryPostgres("dkm") 
 # queryPostgres code will not run without a env script.
+# it is also an option to pull data from a bigquery database
+# pointData <- queryBiobase("randompoints") 
+# queryBiobase is intended to be used in a cloud environment
 
 # +
 # for testing, only use a small subset of data

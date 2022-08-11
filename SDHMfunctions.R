@@ -223,6 +223,7 @@ glmFunction <- function(cutData, rasters) {
   t <- as.data.frame(table$coefficients) %>% 
     mutate_if(is.numeric, ~round(., 5))
   t <- t[order( t[,ncol(t)] ),]
+  t <- head(t,20)
   # grid.draw(tableGrob(t))
   grid.newpage()
   vp <- viewport(x = 0.4, y = 0.35, width = 1, height = 5) 

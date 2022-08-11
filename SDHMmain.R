@@ -2,7 +2,7 @@
 # This script requires a functions script titled "SDHMfunctions"
 # This script is designed to create ensemble species distribution models from presence point data and predictor layers
 # Written by William Wiskes
-# Last update 6/22/2021
+# Last update 8/11/2021
 # ---
 
 #at 32gb ram & 16cpu this takes around 1hr to run
@@ -212,4 +212,18 @@ plot(blob$geometry, add =T)
 
 
 writeRaster(ensemble, filename = "ensemble.img", overwrite = T)
+
+# +
+#optional - make a report
+nested_list <- list(rasterList = list(rasterList),
+                    cut = list(cut),
+                    preserve = list(preserve),
+                    remove = list(remove))
+
+report <- as.data.frame(do.call(cbind, nested_list))
+report <- apply(report,2,as.character)
+# -
+
+write.csv(report, file = 'report.csv')
+
 

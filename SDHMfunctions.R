@@ -139,19 +139,39 @@ cutFunction <- function(data, cut, preserve, remove) {
     BadCol <- c()
     #append column names over cut threshold to a list except the first variable correlated to them.
     #only check subsiquent columns if not already in list.
+    
+    # for (x in colnames(df4)) {
+    #   var <- df4 %>%
+    #     dplyr::select(x) %>%
+    #     filter(get(x) != FALSE)
+    #   if (row.names(var) != colnames(var)) {
+    #     #print(row.names(var)[2:length(row.names(var))])
+    #     if (!(colnames(var) %in% BadCol)){
+    #     BadCol <- append(BadCol,row.names(var)[2:length(row.names(var))])
+    #     }
+    #   }
+    #   
+    #   #print(get(paste0('df4$', x)))
+    # }
+    
     for (x in colnames(df4)) {
       var <- df4 %>%
         dplyr::select(x) %>%
         filter(get(x) != FALSE)
-      if (row.names(var) != colnames(var)) {
+      var = var[row.names(var) != colnames(var), , drop = FALSE]
+      print(var)
+      #if (row.names(var) != colnames(var)) {
+      for (x in row.names(var)) {
         #print(row.names(var)[2:length(row.names(var))])
         if (!(colnames(var) %in% BadCol)){
-        BadCol <- append(BadCol,row.names(var)[2:length(row.names(var))])
+          #BadCol <- append(BadCol,row.names(var)[2:length(row.names(var))])
+          BadCol <- append(BadCol,x)
         }
       }
       
       #print(get(paste0('df4$', x)))
     }
+    
     #print(BadCol)  
     #remove predictors over cut threshold 
     bad <- names(data) %in% c(BadCol, remove)

@@ -2,7 +2,7 @@
 # This script is a companion to the main script titled "SDHMmain"
 # This script stores functions called by the main script and should not be altered.
 # Written by William Wiskes
-# Last update 6/21/2021
+# Last update 8/21/2021
 # ---
 
 #this function will pull in data from a postgres database
@@ -231,15 +231,15 @@ formatColumns <- function(dat) {
     mod.formula <- as.formula(paste(as.factor(resp), "~", paste(pred, collapse = "+"))) # formula
 }
 glmFunction <- function(cutData, rasters) {
-  mod1.LR <- glm(formatColumns(cutData), family = binomial, data = cutData)
-  mod2.LR <-step(mod1.LR, trace = F)
-  mod2.pred <- predict(mod2.LR, type = "response")
-  mod1 <- "mod2.LR"
-  dat2 <-cbind(mod1, cutData[1], mod2.pred)
-  mod.cut.GLM <- optimal.thresholds(dat2, opt.methods = c("Default"))
+  prestep <- glm(formatColumns(cutData), family = binomial, data = cutData)
+  model <-step(prestep, trace = F)
+  prediction <- predict(model, type = "response")
+  mod1 <- "model"
+  data <-cbind(mod1, cutData[1], prediction)
+  thresh <- optimal.thresholds(data, opt.methods = c("Default"))
   ##table
   # plot.new()
-  table <- summary(mod2.LR)
+  table <- summary(model)
   t <- as.data.frame(table$coefficients) %>% 
     mutate_if(is.numeric, ~round(., 5))
   t <- t[order( t[,ncol(t)] ),]
@@ -255,22 +255,22 @@ glmFunction <- function(cutData, rasters) {
   
   #start accuracy assessment
 
-  jack <- nrow(cutData)
-  mod2.jack <- CVbinary(mod2.LR, nfolds = jack, rand = c(1:jack), print.details = F)
-  mod2.jack <- mod2.jack$cvhat
-  dat2 <- cbind(dat2, mod2.jack)
-  auc.roc.plot(dat2, color = T)
+  nfolds <- nrow(cutData)
+  jack <- CVbinary(model, nfolds = nfolds, rand = c(1:nfolds), print.details = F)
+  jack <- jack$cvhat
+  data2 <- cbind(data, jack)
+  auc.roc.plot(data2, color = T)
   
-  mod2.accB <- presence.absence.accuracy(dat2, threshold = mod.cut.GLM$mod2.pred, st.dev = F)
-  tss <- mod2.accB$sensitivity+mod2.accB$specificity-1
+  accuracy <- presence.absence.accuracy(data2, threshold = thresh$prediction, st.dev = F)
+  tss <- accuracy$sensitivity+accuracy$specificity-1
   
-  mod2.accB <- cbind(mod2.accB[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
+  accuracy <- cbind(accuracy[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
   plot.new()
-  grid.draw(tableGrob(mod2.accB))
+  grid.draw(tableGrob(accuracy))
   #end acc assess
-  modFprob.LR <- predict(rasters, mod2.LR, type = "response", fun = predict, index = 2)
-  modFclas.LR <- reclassify(modFprob.LR, (c(0, mod.cut.GLM$mod2.pred, 0, mod.cut.GLM$mod2.pred, 1, 1)))
-  modFclas.LR
+  prediction2 <- predict(rasters, model, type = "response", fun = predict, index = 2)
+  reclass <- reclassify(prediction2, (c(0, thresh$prediction, 0, thresh$prediction, 1, 1)))
+  reclass
 }
 
 #Generalized additive model
@@ -287,13 +287,13 @@ formatScope <- function(dat) {
 }
 gamFunction <- function(cutData, rasters) {
   
-  mod1.LR <- gam(formatGam(cutData), family = binomial, data = cutData)
+  prestep <- gam(formatGam(cutData), family = binomial, data = cutData)
   out<- formatScope(cutData) #new
   out<- lapply(out,as.formula) ##
   names(out) <- colnames(cutData[c(4:ncol(cutData))]) # new
-  mod2.LR <-step.Gam(mod1.LR, scope=out) #new
+  model <-step.Gam(prestep, scope=out) #new
   #table
-  table <- summary(mod2.LR)
+  table <- summary(model)
   t <- as.data.frame(table$anova) %>%
     mutate_if(is.numeric, ~round(., 5)) %>% 
     na.omit()
@@ -304,27 +304,27 @@ gamFunction <- function(cutData, rasters) {
   tg <- tableGrob(t, vp = vp)
   grid.draw(tg)
   #
-  mod2.pred <- predict(mod2.LR, type = "response")
-  mod1 <- "mod2.LR"
-  dat2 <-cbind(mod1, cutData[1], mod2.pred)
-  mod.cut.GLM <- optimal.thresholds(dat2, opt.methods = c("Default"))
+  prediction <- predict(model, type = "response")
+  mod1 <- "model"
+  dat2 <-cbind(mod1, cutData[1], prediction)
+  thresh <- optimal.thresholds(dat2, opt.methods = c("Default"))
   #
-  jack <- nrow(cutData)
-  mod3.jack5 <- CVbinary(mod2.LR, nfolds = 3, print.details = F)
-  mod3.jack5 <- mod3.jack5$cvhat
-  dat3 <- cbind(dat2, mod3.jack5)
+  nfolds <- nrow(cutData)
+  mod3.nfolds5 <- CVbinary(model, nfolds = 3, print.details = F)
+  mod3.nfolds5 <- mod3.nfolds5$cvhat
+  dat3 <- cbind(dat2, mod3.nfolds5)
   auc.roc.plot(dat3, color = T)
   #
   #start acc ass
-  mod0.acc <- presence.absence.accuracy(dat3, threshold = mod.cut.GLM$mod2.pred, st.dev = F) #dat2
+  mod0.acc <- presence.absence.accuracy(dat3, threshold = thresh$prediction, st.dev = F) #dat2
   tss <- mod0.acc$sensitivity+mod0.acc$specificity -1
   mod0.acc <- cbind(mod0.acc[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
   plot.new()
   grid.draw(tableGrob(mod0.acc))
   
   #
-  modFprob.LR <- predict(rasters, mod2.LR, type = "response", fun = predict, index = 2)
-  modFclas.GAM <- reclassify(modFprob.LR, (c(0, mod.cut.GLM$mod2.pred, 0, mod.cut.GLM$mod2.pred, 1, 1)))
+  modFprob.LR <- predict(rasters, model, type = "response", fun = predict, index = 2)
+  modFclas.GAM <- reclassify(modFprob.LR, (c(0, thresh$prediction, 0, thresh$prediction, 1, 1)))
   modFclas.GAM 
 }
 

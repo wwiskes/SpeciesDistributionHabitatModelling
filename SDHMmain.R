@@ -170,10 +170,6 @@ rasters <- rasterStack(cutData, rasterList, column_names)
 #optional, crop rasters to the modelling extent.
 rasters <- crop(rasters, ext)
 
-##########################################START TESTING
-source("SDHMfunctions.R")
-############################################END TESTING
-
 #Generalized linear model
 glm <- glmFunction(cutData, rasters)
 

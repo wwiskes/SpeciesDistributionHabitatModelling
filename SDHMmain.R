@@ -2,7 +2,7 @@
 # This script requires a functions script titled "SDHMfunctions"
 # This script is designed to create ensemble species distribution models from presence point data and predictor layers
 # Written by William Wiskes
-# Last update 8/11/2021
+# Last update 8/22/2021
 # ---
 
 #at 32gb ram & 16cpu this takes around 1hr to run

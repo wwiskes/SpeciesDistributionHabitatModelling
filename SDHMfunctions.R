@@ -2,7 +2,7 @@
 # This script is a companion to the main script titled "SDHMmain"
 # This script stores functions called by the main script and should not be altered.
 # Written by William Wiskes
-# Last update 8/21/2021
+# Last update 8/22/2021
 # ---
 
 #this function will pull in data from a postgres database
@@ -341,46 +341,40 @@ maxFunction <- function(cutData, rasters) {
   model <- maxent(rasters, training)
   randomp <- randomPoints(rasters, 1000)
   plot(model,cex=.5)
-  #eval <- evaluate(model, p = validation, a = randomp, x = rasters)
-  extractValidation <- data.frame(raster::extract(rasters, validation))
-  extractRandompoints <- data.frame(raster::extract(rasters, randomp))
-  #evaluateRandomVsValidation <- evaluate(model, p = extractValidation, a = extractRandompoints)
   
   modelxy <- data.frame(randomPoints(rasters, dim(xy)[1]*4))
   modelpts <- data.frame(raster::extract(rasters, modelxy))
-  modelpred <- predict(model, modelpts)
   modelxy$sppres <- as.integer(0)
   
-  pres.pts <- data.frame(raster::extract(rasters, xy))
-  pres.pred <- predict(model, pres.pts)
-  mod1.val <- evaluate(model, p = validation, a = modelxy[,-3], x = rasters)
-  ybcu.tr.p <- cutData %>% filter(sppres == 1)
+  prespts <- data.frame(raster::extract(rasters, xy))
+  prespred <- predict(model, prespts)
+  eval <- evaluate(model, p = validation, a = modelxy[,-3], x = rasters)
+  truepres <- cutData %>% filter(sppres == 1)
   
   modl <- "model"
-  mod1.pred <- pres.pred
   
-  tmp.p <- cbind(as.data.table(modl), as.data.table(ybcu.tr.p[1]), as.data.table(mod1.pred))
-  mod1.pred <- modelpred
+  modelprediction1 <- cbind(as.data.table(modl), as.data.table(truepres[1]), as.data.table(prespred))
+  prespred <- predict(model, modelpts)
   #pad shortest vector with NA's to have same length as longest vector
-  length(mod1.pred) <- length(modelxy[3])
+  length(prespred) <- length(modelxy[3])
   #
-  tmp.b <- cbind(modl, modelxy[3], mod1.pred)
-  data <- data.frame(rbind(tmp.p, tmp.b))
-  mod.cut.MAXENT <- threshold(mod1.val)
-  optimal.thresholds(data, opt.methods = 1:6)
-  mod.cut.MAXENT[c(1:2)]
-  optimal.thresholds(data, opt.method = c(4,3))
-  mod1.cfmat <- table(data[[2]], factor(as.numeric(data$mod1.pred >= mod.cut.MAXENT$spec_sens)))
+  modelprediction2 <- cbind(modl, modelxy[3], prespred)
+  data <- data.frame(rbind(modelprediction1, modelprediction2))
+  threshold <- threshold(eval)
+  #optimal.thresholds(data, opt.methods = 1:6)
+  #threshold[c(1:2)]
+  #optimal.thresholds(data, opt.method = c(4,3))
+  #mod1.cfmat <- table(data[[2]], factor(as.numeric(data$prespred >= threshold$spec_sens)))
   #acc ass
   auc.roc.plot(data, color = T)
-  mod1.acc <- presence.absence.accuracy(data, threshold = mod.cut.MAXENT$spec_sens, st.dev = F)
-  tss <- mod1.acc$sensitivity + mod1.acc$specificity - 1
-  mod1.acc <- cbind(mod1.acc[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
+  accuracy <- presence.absence.accuracy(data, threshold = threshold$spec_sens, st.dev = F)
+  tss <- accuracy$sensitivity + accuracy$specificity - 1
+  accuracy <- cbind(accuracy[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
   plot.new()
-  grid.draw(tableGrob(mod1.acc))
+  grid.draw(tableGrob(accuracy))
   #
   modelprob = predict(model, rasters)
-  modelclas = reclassify(modelprob, c(0,mod.cut.MAXENT[[2]],0,mod.cut.MAXENT[[2]],1,1))
+  modelclas = reclassify(modelprob, c(0,threshold[[2]],0,threshold[[2]],1,1))
   modelclas 
   
 } 
@@ -395,28 +389,28 @@ formatRaf <- function(dat) {
     mod.formula <- as.formula(paste(resp, "~", paste(pred, collapse = "+"))) # formula
 }
 rafFunction <- function(cutData, rasters) {   
-    mod1.RF <- randomForest(formatRaf(cutData), importance = T, keep.forest = T, data = cutData)
-    varImpPlot(mod1.RF,type=2)
-    mod1.pred <- predict(mod1.RF, type = "prob")[,2]
-    modl <- "mod1.RF"
+    model <- randomForest(formatRaf(cutData), importance = T, keep.forest = T, data = cutData)
+    varImpPlot(model,type=2)
+    mod1.pred <- predict(model, type = "prob")[,2]
+    modl <- "model"
     data <- cbind(modl, cutData[1], mod1.pred)
     auc.roc.plot(data, color = T)
     #ac as
-    mod.cut.RF <- optimal.thresholds(data, opt.methods = c("ReqSens"), req.sens = 0.95)
-    mod1.acc <- presence.absence.accuracy(data, threshold = mod.cut.RF$mod1.pred, st.dev = F)
-    tss <- mod1.acc$sensitivity + mod1.acc$specificity -1
-    mod1.acc <- cbind(mod1.acc[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
+    threshold <- optimal.thresholds(data, opt.methods = c("ReqSens"), req.sens = 0.95)
+    accuracy <- presence.absence.accuracy(data, threshold = threshold$mod1.pred, st.dev = F)
+    tss <- accuracy$sensitivity + accuracy$specificity -1
+    accuracy <- cbind(accuracy[1:7], tss) %>% mutate_if(is.numeric, ~round(., 5))
     plot.new()
-    grid.draw(tableGrob(mod1.acc)) 
+    grid.draw(tableGrob(accuracy)) 
     #
-    oob.acc <- presence.absence.accuracy(data, st.dev = F)
-    tss <-oob.acc$sensitivity + oob.acc$specificity - 1
-    oob.acc <- cbind(oob.acc[1:7], tss)
-    oob.acc$model <- "mod1.predoob"
-    RF.acc <- rbind(oob.acc[c(1, 4:5, 7:8)],mod1.acc[c(1, 4:5, 7:8)])
-    mod1.RFprob <- predict(rasters, mod1.RF, type="response", fun = predict, index = 2)
-    mod1.RFclas <- reclassify(mod1.RFprob, c(0,mod.cut.RF[[2]],0,mod.cut.RF[[2]],1,1))
-    mod1.RFclas
+    # oob.acc <- presence.absence.accuracy(data, st.dev = F)
+    # tss <-oob.acc$sensitivity + oob.acc$specificity - 1
+    # oob.acc <- cbind(oob.acc[1:7], tss)
+    # oob.acc$model <- "mod1.predoob"
+    # RF.acc <- rbind(oob.acc[c(1, 4:5, 7:8)],accuracy[c(1, 4:5, 7:8)])
+    modelprob <- predict(rasters, model, type="response", fun = predict, index = 2)
+    modelclas <- reclassify(modelprob, c(0,threshold[[2]],0,threshold[[2]],1,1))
+    modelclas
     }
 
 
@@ -427,27 +421,27 @@ brtFunction <- function(data, rasters) {
     n.col <- ncol(dat1)
     pred <- 4:n.col
     resp <- paste("as.factor(", colnames(dat1[1]), ")", sep = "")
-    mod1.BRT <- gbm.step(data = dat1, gbm.x = pred, gbm.y = 1, family = "bernoulli", tree.complexity = 3, learning.rate = 1e-04, bag.fraction = .75, n.folds = 10, n.trees = 50, plot.main = TRUE, keep.fold.fit = T)
+    model <- gbm.step(data = dat1, gbm.x = pred, gbm.y = 1, family = "bernoulli", tree.complexity = 3, learning.rate = 1e-04, bag.fraction = .75, n.folds = 10, n.trees = 50, plot.main = TRUE, keep.fold.fit = T)
     #mod2.BRT <-gbm.step(data = dat1, gbm.x = pred, gbm.y = 1, family = "bernoulli", tree.complexity = 3, learning.rate = .1, bag.fraction = .75, n.folds = 10, plot.main = TRUE, keep.fold.fit = TRUE)    
     modl <- "mod2.BRT"
-    dat2 <- cbind(modl, dat1[1], mod1.BRT$fitted, mod1.BRT$fold.fit)
+    dat2 <- cbind(modl, dat1[1], model$fitted, model$fold.fit)
     names(dat2)[3:4] <-c("pred", "cvpred")
     dat2$cvpred <- exp(dat2$cvpred)/(1+ exp(dat2$cvpred))
-    mod.cut.BRT <- optimal.thresholds(dat2, opt.methods = c("ObsPrev"))
-    mod1.cfmatR <- table(dat2[[2]], factor(as.numeric(dat2$pred >= mod.cut.BRT$pred)))
-    gbm.plot(mod1.BRT)
+    threshold <- optimal.thresholds(dat2, opt.methods = c("ObsPrev"))
+    #mod1.cfmatR <- table(dat2[[2]], factor(as.numeric(dat2$pred >= threshold$pred)))
+    gbm.plot(model)
 
-    mod1.cfmatX <- table(dat2[[2]], factor(as.numeric(dat2$cvpred >= mod.cut.BRT$cvpred)))
+    #mod1.cfmatX <- table(dat2[[2]], factor(as.numeric(dat2$cvpred >= threshold$cvpred)))
     #acc as
     auc.roc.plot(dat2, color = T)
-    mod1.acc <- presence.absence.accuracy(dat2, threshold = mod.cut.BRT$pred, st.dev = F)
-    tss <- mod1.acc$sensitivity + mod1.acc$specificity - 1
-    mod1.acc.brt <- cbind(mod1.acc[1:7], tss)  %>% mutate_if(is.numeric, ~round(., 5))
+    accuracy <- presence.absence.accuracy(dat2, threshold = threshold$pred, st.dev = F)
+    tss <- accuracy$sensitivity + accuracy$specificity - 1
+    accuracy.brt <- cbind(accuracy[1:7], tss)  %>% mutate_if(is.numeric, ~round(., 5))
     plot.new()
-    grid.draw(tableGrob(mod1.acc.brt))
+    grid.draw(tableGrob(accuracy.brt))
     #
-    mod1.BRTprob = predict(rasters, mod1.BRT, n.trees = mod1.BRT$gbm.call$best.trees, type = "response")
-    mod1.BRTclas <- reclassify(mod1.BRTprob, c(0,mod.cut.BRT[[2]],0,mod.cut.BRT[[2]],1,1))
+    modelprob = predict(rasters, model, n.trees = model$gbm.call$best.trees, type = "response")
+    modelclas <- reclassify(modelprob, c(0,threshold[[2]],0,threshold[[2]],1,1))
     
-    mod1.BRTclas
+    modelclas
 }

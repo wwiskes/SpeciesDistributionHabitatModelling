@@ -16,16 +16,20 @@ queryPostgres <- function(species) {
 }
 
 
-library(bigrquery)  
 queryBiobase <- function(species) {
-  library(dplyr)
-  con <- dbConnect(
-    bigquery(),
-    project = "ut-dnr-biobase-dev",
-    dataset = "biobase",
-    billing = "ut-dnr-biobase-dev"
-  )
-  tbl(con, species)
+  # Store the project ID
+  projectid = "ut-dnr-biobase-dev"
+  
+  # Set your query
+  sql <- paste0("SELECT * FROM `ut-dnr-biobase-dev.biobase.", species, "`")
+  
+  # Run the query; this returns a bq_table object that you can query further
+  tb <- bq_project_query(projectid, sql)
+  
+  # Store the data in a tibble
+  out <-bq_table_download(tb)
+  
+  out
 }
 
 #This is a function to loop through your raster list and punch through your occurrence data

@@ -2,7 +2,7 @@
 # This script is a companion to the main script titled "SDHMmain"
 # This script stores functions called by the main script and should not be altered.
 # Written by William Wiskes
-# Last update 8/22/2021
+# Last update 8/23/2021
 # ---
 
 #this function will pull in data from a postgres database
@@ -159,7 +159,7 @@ cutFunction <- function(data, cut, preserve, remove) {
         dplyr::select(x) %>%
         filter(get(x) != FALSE)
       var = var[row.names(var) != colnames(var), , drop = FALSE]
-      print(var)
+      #print(var)
       #if (row.names(var) != colnames(var)) {
       for (x in row.names(var)) {
         #print(row.names(var)[2:length(row.names(var))])

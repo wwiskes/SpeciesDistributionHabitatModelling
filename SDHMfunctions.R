@@ -2,7 +2,7 @@
 # This script is a companion to the main script titled "SDHMmain"
 # This script stores functions called by the main script and should not be altered.
 # Written by William Wiskes
-# Last update 8/23/2021
+# Last update 8/24/2021
 # ---
 
 #this function will pull in data from a postgres database
@@ -16,6 +16,7 @@ queryPostgres <- function(species) {
 }
 
 
+library(bigrquery)
 queryBiobase <- function(species) {
   # Store the project ID
   projectid = "ut-dnr-biobase-dev"

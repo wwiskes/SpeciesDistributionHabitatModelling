@@ -2,7 +2,7 @@
 # This script is a companion to the main script titled "SDHMmain"
 # This script stores functions called by the main script and should not be altered.
 # Written by William Wiskes
-# Last update 8/24/2021
+# Last update 9/6/2022
 # ---
 
 #this function will pull in data from a postgres database
@@ -303,7 +303,7 @@ gamFunction <- function(cutData, rasters) {
     na.omit()
   t <- t[order( t[,1] ),]
   grid.newpage()
-  vp <- viewport(x = 0.4, y = 0.35, width = 1, height = 5) 
+  vp <- viewport(x = 0.4, y = 0.18, width = 1, height = 5) 
   grid.rect(vp = vp)
   tg <- tableGrob(t, vp = vp)
   grid.draw(tg)

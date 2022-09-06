@@ -2,7 +2,7 @@
 # This script requires a functions script titled "SDHMfunctions"
 # This script is designed to create ensemble species distribution models from presence point data and predictor layers
 # Written by William Wiskes
-# Last update 8/22/2021
+# Last update 9/6/2021
 # ---
 
 #at 32gb ram & 16cpu this takes around 1hr to run
@@ -107,8 +107,8 @@ pointData <- read.csv("randompoints.csv")
 
 # +
 # for testing, only use a small subset of data
-# pointData <- head(pointData,100) 
-# pointData
+pointData <- head(pointData,300) 
+pointData
 # -
 
 #They are in the projection 5070, please set x&y coords accordingly

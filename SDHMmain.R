@@ -106,8 +106,8 @@ pointData <- read.csv("randompoints.csv")
 # queryBiobase is intended to be used in a cloud environment
 
 # +
-# for testing, only use a small subset of data
-pointData <- head(pointData,300) 
+# # for testing, only use a small subset of data
+# pointData <- head(pointData,300) 
 pointData
 # -
 

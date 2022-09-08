@@ -2,7 +2,7 @@
 # This script requires a functions script titled "SDHMfunctions"
 # This script is designed to create ensemble species distribution models from presence point data and predictor layers
 # Written by William Wiskes
-# Last update 9/7/2022
+# Last update 9/8/2022
 # ---
 
 #at 32gb ram & 16cpu this takes around 1hr to run
@@ -146,7 +146,7 @@ head(pointPseudo) #x&y columns always lat/long
 #Run your point data against the rasters to extract the prediction values
 data <- extractStack(pointPseudo, rasterList)
 column_names <- colnames(head(data)[,9:ncol(data)])
-## Remove rows and columns with more than 50% NA. Rpws must come first to remove points outside the sample frame
+## Remove rows and columns with more than 50% NA. Rows must come first to remove points outside the sample frame
 data<- data[which(rowMeans(!is.na(data[,9:ncol(data)])) > 0.5), ]
 data<- data[, which(colMeans(!is.na(data)[,9:ncol(data)]) > 0.5)]
 head(data)

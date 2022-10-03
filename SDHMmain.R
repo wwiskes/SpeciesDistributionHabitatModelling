@@ -223,4 +223,28 @@ report <- apply(report,2,as.character)
 
 write.csv(report, file = 'report.csv')
 
+library("mapview")
+library("leaflet")
+
+points <- pointSF %>% st_transform(crs = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+points <- st_coordinates(points)
+
+# +
+pal <- colorNumeric(c("#0C2C84", "#41B6C4", "#FFFFCC"), values(ensemble),
+                    na.color = "transparent")
+
+map <- leaflet(points) %>% addTiles() %>%
+  addMarkers() %>%
+  addRasterImage(ensemble, colors = pal, opacity = 0.8) %>%
+  addLegend(pal = pal, values = values(ensemble),
+            title = "Ensemble")
+# -
+
+mapshot(map, "ensemble.html")
+
+map
+
+
+
+
 

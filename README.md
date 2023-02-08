@@ -62,3 +62,33 @@ Use 'Pull from Remote (force)' to pull in new revisions of this code:
 
 
 Thanks and happy modelling!
+
+# Update
+
+It has come to my attention that the dependencies in Vertex AI aren't super easy to install. Please install dependencies from terminal by opening a new terminal like so:
+
+![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture10.PNG)
+
+Then line by line run the following commands:
+
+```
+sudo apt install libgdal-dev
+sudo apt install libudunits2-dev
+sudo apt install libprotobuf-dev
+sudo apt install libjq-dev
+sudo apt install libv8-dev
+sudo R
+install.packages("raster")
+install.packages("sf")
+install.packages("RPostgreSQL")
+install.packages("rgdal")
+install.packages("sfheaders")
+install.packages("PresenceAbsence")
+install.packages("DAAG")
+install.packages("gam")
+install.packages("dismo")
+install.packages("rJava")
+install.packages("randomForest")
+install.packages("gbm")
+install.packages("geojsonio")
+```

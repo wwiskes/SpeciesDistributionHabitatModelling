@@ -67,7 +67,7 @@ Thanks and happy modelling!
 
 It has come to my attention that the dependencies in Vertex AI aren't super easy to install. Please install dependencies from terminal by opening a new terminal like so:
 
-![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture10.PNG)
+![alt text](https://wwiskes.github.io/datadump/SDHMtut/Capture11.PNG)
 
 Then line by line run the following commands:
 

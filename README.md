@@ -91,4 +91,5 @@ install.packages("rJava")
 install.packages("randomForest")
 install.packages("gbm")
 install.packages("geojsonio")
+install.packages("mapview")
 ```
